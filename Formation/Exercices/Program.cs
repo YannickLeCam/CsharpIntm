@@ -10,7 +10,12 @@ namespace Exercices
     {
         static void Main(string[] args)
         {
-
+            int x = 12 * 30;
+            Console.WriteLine("La valeur de 'X' est égal a : " + x);
+            int y = 10;
+            Console.WriteLine("La valeur de 'Y' est égale a : " + y);
+            int z = x + y;
+            Console.WriteLine("La valeur de 'X + Y' est égale a : " + z);
         }
     }
 }
