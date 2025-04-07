@@ -45,7 +45,7 @@ namespace Exercices
                             Console.WriteLine(tabJoursSemaine[i]);
                         }*/
             
-
+            //TEST EXERCICE 1
             BasicOperation(2, 2, '+');
             BasicOperation(2, 2, 'J');
             BasicOperation(4, 4,'/');
@@ -61,6 +61,13 @@ namespace Exercices
             Pow(2,3);
             Pow(1000, 0);
             Pow(4, -5);
+            //TEST EXERCICE 2
+            Console.WriteLine("Test de l'horloge avec 12 : " + GoodDay(12));
+            Console.WriteLine("Test de l'horloge avec 0 : " + GoodDay(0));
+            Console.WriteLine("Test de l'horloge avec -5 : " + GoodDay(-5));
+            Console.WriteLine("Test de l'horloge avec 19 : " + GoodDay(19));
+            Console.WriteLine("Test de l'horloge avec 11 : " + GoodDay(11));
+
             Console.ReadKey();
         }
 
@@ -143,5 +150,31 @@ namespace Exercices
             Console.Write('\n');
         }
 
+        static string GoodDay(int heure)
+        {
+            if (heure > 24 || heure < 0)
+            {
+                return "L'heure n'est pas valide";
+            }
+            switch (heure)
+            {
+                case int h when h < 6:
+                    return "Merveilleuse Nuit !";
+                    break;
+                case int h when h >= 6 && h < 12:
+                    return "Bonne matinée !";
+                    break;
+                case int h when h == 12:
+                    return "Bon app ! ♥";
+                case int h when h >= 13 && h < 18:
+                    return "Profitez de votre après-midi ! ";
+                    break;
+                case int h when h >= 18:
+                    return "Passez une bonne soirée !";
+                    break;
+                default:
+                    return "Bug de l'horloge parlante ! :X";
+            }
+        }
     }
 }
