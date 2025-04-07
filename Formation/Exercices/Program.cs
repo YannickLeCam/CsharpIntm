@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -67,7 +69,8 @@ namespace Exercices
             Console.WriteLine("Test de l'horloge avec -5 : " + GoodDay(-5));
             Console.WriteLine("Test de l'horloge avec 19 : " + GoodDay(19));
             Console.WriteLine("Test de l'horloge avec 11 : " + GoodDay(11));
-
+            //TEST EXERCICE 3
+            PyramidConstruction(50);
             Console.ReadKey();
         }
 
@@ -160,20 +163,49 @@ namespace Exercices
             {
                 case int h when h < 6:
                     return "Merveilleuse Nuit !";
-                    break;
                 case int h when h >= 6 && h < 12:
                     return "Bonne matinée !";
-                    break;
                 case int h when h == 12:
                     return "Bon app ! ♥";
                 case int h when h >= 13 && h < 18:
                     return "Profitez de votre après-midi ! ";
-                    break;
                 case int h when h >= 18:
                     return "Passez une bonne soirée !";
-                    break;
                 default:
                     return "Bug de l'horloge parlante ! :X";
+            }
+        }
+
+        static void ConstructionNivPyr(int etage,int etage_max,char bloc = '*') 
+        {
+            string affi = $"{bloc}";
+            int longueurMaxPyr = etage_max - 1;
+            int longueurEtage = etage - 1;
+            for (int i = 0; i < longueurEtage; i++)
+            {
+                affi = $"{bloc}" + affi + $"{bloc}";
+            }
+            for (int i = 0; i < longueurMaxPyr-longueurEtage; i++)
+            {
+                affi = " " + affi + " ";
+            } 
+            Console.WriteLine(affi);
+        }
+
+        static void PyramidConstruction(int etage) 
+        {
+            char bloc = '*';
+            for (int i = 1; i <= etage; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    bloc = '-';
+                }
+                else 
+                {
+                    bloc = '+';
+                }
+                ConstructionNivPyr (i, etage,bloc);
             }
         }
     }
