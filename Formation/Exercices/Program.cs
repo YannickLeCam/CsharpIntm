@@ -89,8 +89,9 @@ namespace Exercices
                 }
             
             }
-
-
+            //TEST EXERCICE 6
+            Console.WriteLine("Test PGCD 165 100 : " + gcd(165,100));
+            Console.WriteLine("Test PGCD 132 99 : " + gcd(132, 99));
             Console.ReadKey();
         }
 
@@ -256,5 +257,16 @@ namespace Exercices
         
         }
 
+        static int gcd(int a, int b) 
+        {
+            if (a % b == 0)
+            {
+                return b;
+            }
+            else
+            { 
+                return gcd(b , a%b);
+            }
+        }
     }
 }
