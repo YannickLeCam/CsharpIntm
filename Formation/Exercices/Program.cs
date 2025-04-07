@@ -71,6 +71,10 @@ namespace Exercices
             Console.WriteLine("Test de l'horloge avec 11 : " + GoodDay(11));
             //TEST EXERCICE 3
             PyramidConstruction(50);
+
+            //TEST exercice 4 
+            Console.WriteLine("Factorial Itérative de 10 : " + Factorial(10));
+            Console.WriteLine("Factorial Recursive de 10 : " + FactorialRec(10));
             Console.ReadKey();
         }
 
@@ -208,5 +212,25 @@ namespace Exercices
                 ConstructionNivPyr (i, etage,bloc);
             }
         }
+
+        static int Factorial(int n)
+        {
+            int retour = 1;
+            for (int i = 1; i <= n; i++)
+            {
+                retour = retour * i;
+            }
+            return retour;
+        }
+        static int FactorialRec(int n)
+        {
+            if (n == 0) return 1;
+            else return n * FactorialRec(n-1);
+        }
+        //La methode la plus efficace est la facon recursive ! 
+        //Car pas de valeur intermediaire ^^
+
+
+
     }
 }
