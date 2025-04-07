@@ -75,6 +75,22 @@ namespace Exercices
             //TEST exercice 4 
             Console.WriteLine("Factorial Itérative de 10 : " + Factorial(10));
             Console.WriteLine("Factorial Recursive de 10 : " + FactorialRec(10));
+            
+
+            //TEST exercice 5
+            Console.WriteLine("Test de isPrime 13 : " + isPrime(13));
+            Console.WriteLine("Test de isPrime 10 : " + isPrime(10));
+            Console.WriteLine("Test de isPrime 150 : " + isPrime(150));
+            for (int i = 1; i < 100; i++) 
+            {
+                if (isPrime(i))
+                {
+                    Console.WriteLine(i);
+                }
+            
+            }
+
+
             Console.ReadKey();
         }
 
@@ -230,7 +246,15 @@ namespace Exercices
         //La methode la plus efficace est la facon recursive ! 
         //Car pas de valeur intermediaire ^^
 
-
+        static bool isPrime(int n) 
+        {
+            for (int i = 2; i < n ; i++) 
+            {
+                if (n % i == 0) return false;
+            }
+            return true;
+        
+        }
 
     }
 }
