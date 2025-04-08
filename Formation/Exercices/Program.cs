@@ -93,7 +93,7 @@ namespace Exercices
             Console.OutputEncoding = Encoding.UTF8;
 
             int x = 12 * 30;
-            Console.WriteLine("La valeur de 'X' est égal a : " + x.ToString("C2",us));
+            Console.WriteLine("La valeur de 'X' est égal a : " + x.ToString("C2", us));
 
             int y = 10;
             Console.WriteLine("La valeur de 'Y' est égale a : " + y);
@@ -105,7 +105,7 @@ namespace Exercices
 
 
             int a = 0;
-            while(a < 10)
+            while (a < 10)
             {
                 a += 1;
                 Console.WriteLine("Je suis dans la boucle while et a = " + a);
@@ -120,11 +120,11 @@ namespace Exercices
             {
                 Console.WriteLine(tabJoursSemaine[i]);
             }
-            
+
             //TEST EXERCICE 1
             BasicOperation(2, 2, '+');
             BasicOperation(2, 2, 'J');
-            BasicOperation(4, 4,'/');
+            BasicOperation(4, 4, '/');
             BasicOperation(1, 0, '/');
             BasicOperation(1, 0, '-');
             BasicOperation(1, 2, '*');
@@ -134,7 +134,7 @@ namespace Exercices
             IntegerDivision(6, 0);
 
             Pow(10, 3);
-            Pow(2,3);
+            Pow(2, 3);
             Pow(1000, 0);
             Pow(4, -5);
             //TEST EXERCICE 2
@@ -149,30 +149,30 @@ namespace Exercices
             //TEST exercice 4 
             Console.WriteLine("Factorial Itérative de 10 : " + Factorial(10));
             Console.WriteLine("Factorial Recursive de 10 : " + FactorialRec(10));
-            
+
 
             //TEST exercice 5
             Console.WriteLine("Test de isPrime 13 : " + isPrime(13));
             Console.WriteLine("Test de isPrime 10 : " + isPrime(10));
             Console.WriteLine("Test de isPrime 150 : " + isPrime(150));
-            for (int i = 1; i < 100; i++) 
+            for (int i = 1; i < 100; i++)
             {
                 if (isPrime(i))
                 {
                     Console.WriteLine(i);
                 }
-            
+
             }
             //TEST EXERCICE 6
-            Console.WriteLine("Test PGCD 165 100 : " + gcd(165,100));
+            Console.WriteLine("Test PGCD 165 100 : " + gcd(165, 100));
             Console.WriteLine("Test PGCD 132 99 : " + gcd(132, 99));
 
 
 
 
             Person george = new Person("Geoge", "DelaJungle", 18, 'C');
-            
-            
+
+
 
 
             Voiture BatMobile = new Voiture("Polo", "Volkwagen", (float)7.5, "Vert Bouteille", 300000, 1999, george);
@@ -185,17 +185,170 @@ namespace Exercices
 
             List<string> listMots = new List<string>() { "Chaussure", "Canapé", "Pédoncule", "Pistil", "Chaussettes" };
 
-            int[] tab1 = { 1, -5, -4, 9, -11, 6, 3, 0 };
+            int[] tab1 = { -11, -5, -4, 0, 4, 6, 19, 123 };
             int[] tab2 = { };
-            Console.WriteLine("Le tableau est : " + tab1);   
+            Console.WriteLine("Le tableau est : " + tab1);
             Console.WriteLine("LinearSearch on cherche -112 " + LinearSearch(tab1, -112));
             Console.WriteLine("LinearSearch on cherche 6 " + LinearSearch(tab1, 6));
             Console.WriteLine("LinearSearch on cherche 6 dans un tab vide " + LinearSearch(tab2, 6));
+
+            Console.WriteLine("dichoSearch on cherche -112 " + DichoSerch(tab1, -112));
+            Console.WriteLine("dichoSearch on cherche 6 " + DichoSerch(tab1, 6));
+            Console.WriteLine("DichoSearch on cherche 6 dans un tab vide " + DichoSerch(tab2, 6));
+
+            int[] matriceA = { 1, 2, 3 };
+            int[] matriceB = { -1, -4, 0 };
+
+            BuildingMatrix(matriceA, matriceB);
+
+            int[][] matriceC = new int[3][];
+            matriceC[0] = new int[]{ 1, 2 };
+            matriceC[1] = new int[] { 4, 6 };
+            matriceC[2] = new int[] { -1, 8 };
+            int[][] matriceD = new int[3][];
+            matriceD[0]= new int[] { -1, 5 };               
+            matriceD[1] = new int[] { -4, 0 };              
+            matriceD[2] = new int[] { 0, 2 };               
+                                                            
+            addMatrix(matriceC, matriceD);                  
+                                                            
+            int[][] matriceE = new int[2][];                
+            matriceE[0] = new int[] { -1, 5 , 5};
+            matriceE[1] = new int[] { -4, 0 , 6};
+
+            mulMatrix(matriceC, matriceE);
+
+            int[] primeTab = EratosthenesSieve(100);
+            for (int i = 0; i < primeTab.Length; i++)
+            {
+                Console.Write($"{primeTab[i]} ");
+            }
 
             Console.ReadKey();
         }
 
 
+        static int[] EratosthenesSieve(int n)
+        {
+            int[] retour = new int[n];
+            int cpt = 0;
+            for (int i = 2; i < n; i++)
+            {
+                if (isPrime(i))
+                {
+                    retour[cpt] = i;
+                    cpt += 1;
+                }
+            }
+            return retour;
+        }
+
+        static int[][] mulMatrix(int[][] leftMatrix, int[][] rightMatrix)
+        {
+            int[][] retour = new int[leftMatrix.Length][];
+            if (leftMatrix.Length != rightMatrix[0].Length || leftMatrix[0].Length != rightMatrix.Length)
+            {
+                return retour;
+            }
+            int sum = 0;
+            for (int i = 0; i < leftMatrix.Length; i++)
+            {
+                retour[i] = new int[leftMatrix.Length];
+                for (int j = 0; j < leftMatrix.Length; j++)
+                {
+                    sum = 0;
+                    for (int k = 0; k < leftMatrix[i].Length; k++)
+                    {
+                        sum += leftMatrix[i][k] * rightMatrix[k][j];
+                    }
+                    retour[i][j] = sum;
+                    Console.Write(retour[i][j] + " ");
+                }
+                Console.Write('\n');
+            }
+            return retour;
+        }
+
+        static int[][] addMatrix(int[][] leftMatrix , int[][] rightMatrix)
+        {
+            int[][] retour = new int[leftMatrix.Length][];
+            if(leftMatrix.Length != rightMatrix.Length || leftMatrix[0].Length != rightMatrix[0].Length)
+            {
+                return retour;
+            }
+
+            for (int i = 0; i < leftMatrix.Length; i++)
+            {
+                retour[i] = new int[leftMatrix[i].Length];
+                for (int j = 0; j < leftMatrix[i].Length; j++)
+                {
+                    retour[i][j] = leftMatrix[i][j] + rightMatrix[i][j];
+                    Console.Write(retour[i][j] + " ");
+                }
+                Console.Write('\n');
+            }
+            return retour;
+        }
+
+
+        static int[][] BuildingMatrix(int[] leftVector , int[] rightVector)
+        {
+            int[][] retour = new int[leftVector.Length][];
+            if (leftVector.Length != rightVector.Length)
+            {
+                return retour;
+            }
+            
+
+            for (int i = 0; i < leftVector.Length; i++)
+            {
+                retour[i] = new int[rightVector.Length];
+                for (int j = 0; j < rightVector.Length; j++)
+                {
+                    retour[i][j] = leftVector[i] * rightVector[j];
+                    Console.Write(retour[i][j] + " ");
+                }
+                Console.Write('\n');
+            }
+            return retour;
+        }
+
+
+
+
+
+
+
+        static int DichoSerch(int[] tableau , int valeur)
+        {
+            if (tableau.Length == 0)
+            {
+                return -1;
+            }
+            int i = tableau.Length / 2;
+            int iBorneMin = 0;
+            int iBorneMax = tableau.Length;
+         
+            while (iBorneMax != iBorneMin)
+            {
+                Console.WriteLine(tableau[i]);
+                if (tableau[i] == valeur)
+                {
+                    return i;
+                }
+                else if (valeur > tableau[i]){
+                    iBorneMin = i;
+                    i = (i + iBorneMax) / 2;
+                }
+                else
+                {
+                    iBorneMax = i;
+                    i = (i + iBorneMin) / 2;
+                }
+            }
+
+            return -1;
+        }
 
         static int LinearSearch(int[] tableau , int valeur)
         {
