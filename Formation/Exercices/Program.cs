@@ -12,6 +12,80 @@ namespace Exercices
 {
     internal class Program
     {
+        enum Genre
+        {
+            Male,
+            Female,
+            AC130DeCombat,
+            Autre
+        }
+        struct Person
+        {
+            public string prenom;
+            public string nom;
+            public int age;
+            public Genre genre;
+
+            public Person(string prenom, string nom , int age , char genre)
+            {
+                this.prenom = prenom;
+                this.nom = nom;
+                this.age = age;
+                switch (genre)
+                {
+                    case 'M':
+                        this.genre = Genre.Male;
+                        break;
+                    case 'F':
+                        this.genre = Genre.Female;
+                        break;
+                    case 'C':
+                        this.genre = Genre.AC130DeCombat;
+                        break;
+                    case 'A':
+                    default:
+                        this.genre = Genre.Autre;
+                        break;
+                }
+            }
+
+
+
+            public string toString()
+            {
+                return $"{this.nom} {this.prenom}";
+            }
+        }
+
+
+        struct Voiture
+        {
+            public string modele;
+            public string marque;
+            public float puissance;
+            public string couleur;
+            public double kilometrage;
+            public int anneeAchat;
+            public Person proprietaire;
+
+            public Voiture (string modele , string marque , float puissance, string couleur, double kilometrage, int anneeAchat , Person proprietaire)
+            {
+                this.modele = modele;
+                this.marque = marque;
+                this.puissance = puissance;
+                this.couleur = couleur;
+                this.kilometrage = kilometrage;
+                this.anneeAchat = anneeAchat;
+                this.proprietaire = proprietaire;
+            }
+
+            public string toString()
+            {
+                return $" La voiture est une {this.modele} de la marque {this.marque}, elle a une puissance de {this.puissance}, la couleur est {this.couleur} et a parcourue {this.kilometrage} km alors quelle a été acheter en {this.anneeAchat} et appartient a {this.proprietaire.toString()}"; 
+            }
+            
+        }
+
         static void Main(string[] args)
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
@@ -37,15 +111,15 @@ namespace Exercices
                 Console.WriteLine("Je suis dans la boucle while et a = " + a);
             }
 
-            /*            string[] tabJoursSemaine = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+            string[] tabJoursSemaine = { "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche" };
 
 
 
 
-                        for (int i = 0; i < tabJoursSemaine.Length; i++)
-                        {
-                            Console.WriteLine(tabJoursSemaine[i]);
-                        }*/
+            for (int i = 0; i < tabJoursSemaine.Length; i++)
+            {
+                Console.WriteLine(tabJoursSemaine[i]);
+            }
             
             //TEST EXERCICE 1
             BasicOperation(2, 2, '+');
@@ -92,11 +166,34 @@ namespace Exercices
             //TEST EXERCICE 6
             Console.WriteLine("Test PGCD 165 100 : " + gcd(165,100));
             Console.WriteLine("Test PGCD 132 99 : " + gcd(132, 99));
+
+
+
+
+            Person george = new Person("Geoge", "DelaJungle", 18, 'C');
+            
+            
+
+
+            Voiture BatMobile = new Voiture("Polo", "Volkwagen", (float)7.5, "Vert Bouteille", 300000, 1999, george);
+            Console.WriteLine(BatMobile.toString());
             Console.ReadKey();
         }
 
 
-        
+
+        /// <summary>
+        /// Cette methode permet de faire les calcules basics et en faire un affichage avec vérification de ce qu'il y a en entrée.
+        /// <example>
+        /// For example:
+        /// <code>
+        /// BasicOperation(2, 2, '+');
+        /// BasicOperation(2, 2, 'J');
+        /// </code>
+        /// 2 + 2 = 4
+        /// 2 J 2 = Opération Ivalide.
+        /// </example>
+        /// </summary>
         static void BasicOperation(int a, int b, char operateur)
         {
             Console.Write($"{a} {operateur} {b} = ");
@@ -151,7 +248,7 @@ namespace Exercices
                 }
             }
         }
-        
+       
         static void Pow(int a, int b) 
         {
             Console.Write($"{a} ^ {b} = ");
