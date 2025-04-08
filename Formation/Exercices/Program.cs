@@ -177,9 +177,51 @@ namespace Exercices
 
             Voiture BatMobile = new Voiture("Polo", "Volkwagen", (float)7.5, "Vert Bouteille", 300000, 1999, george);
             Console.WriteLine(BatMobile.toString());
+
+            int[] tab = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+            Console.WriteLine(maFonction(tab));
+
+
+
+            List<string> listMots = new List<string>() { "Chaussure", "Canapé", "Pédoncule", "Pistil", "Chaussettes" };
+
+            int[] tab1 = { 1, -5, -4, 9, -11, 6, 3, 0 };
+            int[] tab2 = { };
+            Console.WriteLine("Le tableau est : " + tab1);   
+            Console.WriteLine("LinearSearch on cherche -112 " + LinearSearch(tab1, -112));
+            Console.WriteLine("LinearSearch on cherche 6 " + LinearSearch(tab1, 6));
+            Console.WriteLine("LinearSearch on cherche 6 dans un tab vide " + LinearSearch(tab2, 6));
+
             Console.ReadKey();
         }
 
+
+
+        static int LinearSearch(int[] tableau , int valeur)
+        {
+            if (tableau.Length == 0)
+            {
+                return -1;
+            }
+            for (int i = 0; i < tableau.Length; i++)
+            {
+                if (tableau[i] == valeur)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        static int maFonction(params int[] tab)
+        {  
+
+            for (int i = 1; i < tab.Length; i++)
+            {
+                tab[0] += tab[i];
+            }
+            return tab[0];
+        }
 
 
         /// <summary>
