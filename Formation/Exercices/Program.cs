@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Exercices
@@ -227,6 +228,54 @@ namespace Exercices
             Console.ReadKey();
         }
 
+        struct QCM
+        {
+            public string question;
+            public List<string> answer;
+            public string solution;
+            public int weight;
+
+
+            public QCM(string question, List<string> answer , string solution , int weight)
+            {
+                if (weight < 0)
+                {
+                    //Throw execption ! 
+                }
+
+                this.question = question;
+                this.answer = answer;
+                this.solution = solution;
+                this.weight = weight;
+            }
+
+
+            public bool affiQuestion()
+            {
+                Console.WriteLine(this.question);
+                for (int i = 0; i < this.answer.Count; i++)
+                {
+                    Console.Write($" {i + 1} - {this.answer[i]} \n");
+                }
+                string reponse = Console.ReadLine();
+                bool reponseValide = false;
+                while (reponseValide)
+                {
+                    try
+                    {
+                        int result = Int32.Parse(reponse);
+                        reponseValide = true;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("La reponse n'est pas valide retaper la réponse");
+                        reponse = Console.ReadLine();
+                    }
+                }
+                return false;
+            }
+
+        }
 
         static int[] EratosthenesSieve(int n)
         {
