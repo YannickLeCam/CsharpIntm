@@ -243,7 +243,7 @@ namespace Exercices
 
             List<string> answers1 = new List<string>();
             answers1.Add("Oui");
-            answers1.Add("")
+            answers1.Add("Non");
             QCM Question = new QCM("Daren a-t-il 18 ans ?",answers1,"Oui",40);
 
             //====================================================================
@@ -494,18 +494,19 @@ namespace Exercices
                 g.Sum(eleve=> eleve.note)
             )
             ).ToList();
-
-            FileStream fsRetour = new FileStream("C:\\Users\\Formation\\Desktop\\MoyenneClasse.txt", FileMode.OpenOrCreate);
-            StreamWriter writer = new StreamWriter(fsRetour);
-            string strTemp;
-            foreach  (MoyMatiere matiere in moyMat)
+            using (FileStream fsRetour = new FileStream("C:\\Users\\Formation\\Desktop\\MoyenneClasse.txt", FileMode.OpenOrCreate))
+            using (StreamWriter writer = new StreamWriter(fsRetour))
             {
-                temp = matiere.somme / matiere.nbEleve;
-                strTemp = $"{matiere.matiere};{temp}";
-                writer.WriteLine(strTemp);
-                
+                string strTemp;
+                foreach (MoyMatiere matiere in moyMat)
+                {
+                    temp = matiere.somme / matiere.nbEleve;
+                    strTemp = $"{matiere.matiere};{temp}";
+                    writer.WriteLine(strTemp);
+
+                }
             }
-            fsRetour.Close();
+
 /*            for (int i = 0; i < listMatiere.Length; i++)
             {
                 moyMat.Add(new MoyMatiere(listMatiere[i], 0, 0));
