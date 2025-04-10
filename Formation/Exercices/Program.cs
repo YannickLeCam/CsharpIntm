@@ -158,6 +158,7 @@ namespace Exercices
             PyramidConstruction(50);
 
             //TEST exercice 4 
+            
             Console.WriteLine("Factorial Itérative de 10 : " + Factorial(10));
             Console.WriteLine("Factorial Recursive de 10 : " + FactorialRec(10));
 
@@ -202,7 +203,9 @@ namespace Exercices
             Console.WriteLine("LinearSearch on cherche -112 " + LinearSearch(tab1, -112));
             Console.WriteLine("LinearSearch on cherche 6 " + LinearSearch(tab1, 6));
             Console.WriteLine("LinearSearch on cherche 6 dans un tab vide " + LinearSearch(tab2, 6));
-
+            //Pour une recherche linéaire il devrat parcourir 8 dans le pire des cas.
+            //Pour une recherche dichotomique il devra parcourir 3 itérations(4 si il n'a pas trouvé l'élément) le tableau
+            //Pour une recherche dichotomique il devra parcourir 3 itérations(4 si il n'a pas trouvé l'élément) le tableau
             Console.WriteLine("dichoSearch on cherche -112 " + DichoSerch(tab1, -112));
             Console.WriteLine("dichoSearch on cherche 6 " + DichoSerch(tab1, 6));
             Console.WriteLine("DichoSearch on cherche 6 dans un tab vide " + DichoSerch(tab2, 6));
@@ -237,6 +240,11 @@ namespace Exercices
             Console.WriteLine();
             StringBuilder str = strBuilder(100);
             Console.WriteLine(str);
+
+            List<string> answers1 = new List<string>();
+            answers1.Add("Oui");
+            answers1.Add("")
+            QCM Question = new QCM("Daren a-t-il 18 ans ?",answers1,"Oui",40);
 
             //====================================================================
             //Manipulation de fichier
@@ -549,8 +557,11 @@ namespace Exercices
             }
 
 
-            public bool affiQuestion()
+            public int affiQuestion()
             {
+                int result;
+
+
                 Console.WriteLine(this.question);
                 for (int i = 0; i < this.answer.Count; i++)
                 {
@@ -562,8 +573,16 @@ namespace Exercices
                 {
                     try
                     {
-                        int result = Int32.Parse(reponse);
+                        result = Int32.Parse(reponse);
                         reponseValide = true;
+                        if (this.answer[result] == this.solution)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return 0;
+                        }
                     }
                     catch (FormatException)
                     {
@@ -571,15 +590,7 @@ namespace Exercices
                         reponse = Console.ReadLine();
                     }
                 }
-                if (this.answer[reponse] == this.solution)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-                return false;
+                return -1;
             }
 
         }
