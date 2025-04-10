@@ -271,8 +271,12 @@ namespace Exercices
             reader.Close();
             */
             
-
+            //Exercice 1 
             consDeClass();
+
+            //Exercice 2 
+
+
 
             Console.ReadKey();
         }
@@ -320,7 +324,7 @@ namespace Exercices
             Eleve eleveTmp;
             List<MoyMatiere> moyMat = new List<MoyMatiere>();
 
-            Dictionary<string, double> matMoy;
+            //Dictionary<string, double> matMoy = new Dictionary<string, double>();
 
             string[] splitBuffer = new string[3];
 
@@ -341,20 +345,37 @@ namespace Exercices
 
                 
                
-                if (!(matMoy.ContainsKey(splitBuffer[1])))
+               /* if (matMoy.ContainsKey(splitBuffer[1]))
                 {
                     matMoy.Add(splitBuffer[1], 0);
-                }
+                }*/
                 
                 Console.WriteLine($"{splitBuffer[0]} {splitBuffer[1]} {splitBuffer[2]}");
             }
+            //Test avec Linq initialisation avec Linq
+            moyMat = classe.GroupBy(eleve => eleve.matiere).Select(g => new MoyMatiere
+            (
+                g.Key,
+                g.Count(eleve => eleve.note != null),
+                g.Sum(eleve=> eleve.note)
+            )
+            ).ToList();
 
-            string[] listMatiere = classe.GroupBy(eleve => eleve.matiere).Select(g => g.Key).ToArray();
-
-            for (int i = 0; i < listMatiere.Length; i++)
+            FileStream fsRetour = new FileStream("C:\\Users\\Formation\\Desktop\\MoyenneClasse.txt", FileMode.OpenOrCreate);
+            StreamWriter writer = new StreamWriter(fsRetour);
+            string strTemp;
+            foreach  (MoyMatiere matiere in moyMat)
+            {
+                temp = matiere.somme / matiere.nbEleve;
+                strTemp = $"{matiere.matiere};{temp}";
+                writer.WriteLine(strTemp);
+                
+            }
+            fsRetour.Close();
+/*            for (int i = 0; i < listMatiere.Length; i++)
             {
                 moyMat.Add(new MoyMatiere(listMatiere[i], 0, 0));
-            }
+            }*/
             /*
             for (int i = 0; i < classe.Count; i++)
             {
@@ -716,14 +737,21 @@ namespace Exercices
             Console.WriteLine(affi);
         }
 
-        static void PyramidConstruction(int etage) 
+        static void PyramidConstruction(int etage,bool smooth = false) 
         {
-            char bloc = '*';
+            char bloc = '+';
             for (int i = 1; i <= etage; i++)
             {
                 if (i % 2 == 0)
                 {
-                    bloc = '-';
+                    if (smooth)
+                    {
+                        bloc = '-';
+                    }
+                    else
+                    {
+                        bloc = '+';
+                    }
                 }
                 else 
                 {
