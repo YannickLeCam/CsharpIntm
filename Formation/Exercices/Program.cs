@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
@@ -149,6 +151,10 @@ namespace Exercices
             Console.WriteLine("Test de l'horloge avec 11 : " + GoodDay(11));
             //TEST EXERCICE 3
             // le nombre de blocks pour un étage est  (NumEtage * 2 - 1)
+            // gauche(etage) droite(etage) le num de l'etage cependant le on va y avoir que les blocs de
+            // la pyramide mais pour les espaces on a besoin de savoir la taille maximum de la pyramide
+            // et soustraire le nombre d'etage par le nombre d'étage. 
+            // etage+1 == placement du sommet
             PyramidConstruction(50);
 
             //TEST exercice 4 
@@ -274,9 +280,8 @@ namespace Exercices
             //Exercice 1 
             consDeClass();
 
-            //Exercice 2 
-
-
+            //Exercice 2
+            testingSorts(1000);
 
             Console.ReadKey();
         }
@@ -314,6 +319,127 @@ namespace Exercices
                 this.somme = somme;
             }
         }
+
+        struct SortData
+        {
+            public long InsertionMean;
+            public long InsertionStd;
+            public long QuickMean;
+            public long QuickStd;
+
+            public SortData(long InsertionMean, long InsertionStd , long QuickMean,long QuickStd)
+            {
+                this.InsertionMean = InsertionMean;
+                this.InsertionStd = InsertionStd;
+                this.QuickMean = QuickMean;
+                this.QuickStd = QuickStd;
+            }
+        }
+
+        static SortData testingSorts(int n)
+        {
+            SortData data = new SortData();
+            //Faire le calcule de la moyenne
+
+
+
+
+            Stopwatch stpWtch = new Stopwatch();
+            int[] tabTest = arrayGenerator(n);
+            stpWtch.Start();
+            insertSort(tabTest);
+            stpWtch.Stop();
+            Console.WriteLine($"La fonction insert sort a trier en {stpWtch.ElapsedMilliseconds} ms");
+            Console.WriteLine();
+            stpWtch.Reset();
+            
+
+            int[] tabTest1 = arrayGenerator(n);
+            stpWtch.Start();
+            quickSort(tabTest1,0,tabTest1.Length-1);
+            stpWtch.Stop();
+            Console.WriteLine($"La fonction insert sort a trier en {stpWtch.ElapsedMilliseconds} ms");
+
+
+            return data;
+
+        }
+
+        static int[] arrayGenerator(int size)
+        {
+            int[] tab = new int[size];
+            Random rdm = new Random();
+            for (int i = 0; i < size; i++)
+            {
+                tab[i] = rdm.Next(-1001, 1001);
+            }
+            return tab;
+        }
+        static int[] insertSort(int[] tab)
+        {
+            int temp;
+            for (int i = 0; i < tab.Length; i++)
+            {
+                temp = tab[i];
+                for (int j = 0; j < i; j++)
+                {
+                    if(temp < tab[j])
+                    {
+                        temp = tab[j];
+                        tab[j] = tab[i];
+                        tab[i] = temp;
+                    }
+                }
+            }
+            return tab;
+        }
+        static void swap(int[] tab, int i, int indicePivotFinal)
+        {
+            int temp = tab[i];
+            tab[i] = tab[indicePivotFinal];
+            tab[indicePivotFinal] = temp;
+        }
+
+        static int partition(int[] tab, int min , int max)
+        {
+            int pivot = tab[min];
+            int i = min-1;
+            int indicePivotFinal = max+1;
+
+            while (true)
+            {
+                do
+                {
+                    indicePivotFinal--;
+                } while (tab[indicePivotFinal] > pivot);
+                do
+                {
+                    i++;
+                } while (tab[i]<pivot);
+                if(i < indicePivotFinal)
+                {
+                    swap(tab, i, indicePivotFinal);
+                }
+                else
+                {
+                    return indicePivotFinal;
+                }
+                
+            }
+        }
+
+
+        static int[] quickSort(int[] tab, int min , int max)
+        {
+            if(min < max)
+            {
+                int pivot = partition(tab, min, max);
+                quickSort(tab, min, pivot);
+                quickSort(tab, pivot + 1, max);
+            }
+            return tab;
+        }
+
 
         static void consDeClass()
         {
@@ -444,6 +570,14 @@ namespace Exercices
                         Console.WriteLine("La reponse n'est pas valide retaper la réponse");
                         reponse = Console.ReadLine();
                     }
+                }
+                if (this.answer[reponse] == this.solution)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
                 }
                 return false;
             }
