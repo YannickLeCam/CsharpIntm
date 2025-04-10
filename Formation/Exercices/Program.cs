@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Exercices
 {
@@ -145,6 +148,7 @@ namespace Exercices
             Console.WriteLine("Test de l'horloge avec 19 : " + GoodDay(19));
             Console.WriteLine("Test de l'horloge avec 11 : " + GoodDay(11));
             //TEST EXERCICE 3
+            // le nombre de blocks pour un étage est  (NumEtage * 2 - 1)
             PyramidConstruction(50);
 
             //TEST exercice 4 
@@ -224,8 +228,156 @@ namespace Exercices
             {
                 Console.Write($"{primeTab[i]} ");
             }
+            Console.WriteLine();
+            StringBuilder str = strBuilder(100);
+            Console.WriteLine(str);
+
+            //====================================================================
+            //Manipulation de fichier
+            //====================================================================
+
+            /*
+            FileStream fs = new FileStream("C:\\Users\\Formation\\Desktop\\Chaussure.txt", FileMode.Open);
+            StreamReader reader = new StreamReader(fs);
+            string buffer;
+            Console.WriteLine("AFFICHAGE DU FICHIER AVANT ECRITURE ");
+            while (!reader.EndOfStream)
+            {
+
+                buffer = reader.ReadLine();
+                Console.WriteLine(buffer);
+            }
+
+            
+            
+            StreamWriter writer = new StreamWriter(fs);
+            string input = "ldsjfqlsfqsd";
+            while(input != "")
+            {
+                Console.WriteLine("Entre une marque de chaussure");
+                input = Console.ReadLine();
+                writer.WriteLine(input);
+            }
+            writer.Close();
+            fs.Close();
+            fs = new FileStream("C:\\Users\\Formation\\Desktop\\Chaussure.txt", FileMode.Open);
+            reader = new StreamReader(fs);
+            Console.WriteLine("AFFICHAGE DU FICHIER APRES ECRITURE ");
+            while (!reader.EndOfStream)
+            {
+                buffer = reader.ReadLine();
+                Console.WriteLine(buffer);
+            }
+            reader.Close();
+            */
+            
+
+            consDeClass();
 
             Console.ReadKey();
+        }
+
+
+        struct Eleve
+        {
+            public string nom;
+            public string matiere;
+            public double note;
+
+
+            public Eleve(string nom, string matiere,double note)
+            {
+                if (note<0 || note > 20)
+                {
+                    //Throw execption
+                }
+                this.nom = nom;
+                this.matiere = matiere;
+                this.note = note;
+            }
+        }
+
+        struct MoyMatiere
+        {
+            public string matiere;
+            public int nbEleve;
+            public double somme;
+
+            public MoyMatiere(string matiere , int nbEleve , double somme)
+            {
+                this.matiere = matiere;
+                this.nbEleve = nbEleve;
+                this.somme = somme;
+            }
+        }
+
+        static void consDeClass()
+        {
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            CultureInfo us = new CultureInfo("en-US");
+
+            List<Eleve> classe = new List<Eleve>();
+            Eleve eleveTmp;
+            List<MoyMatiere> moyMat = new List<MoyMatiere>();
+
+            Dictionary<string, double> matMoy;
+
+            string[] splitBuffer = new string[3];
+
+            FileStream fs = new FileStream("C:\\Users\\Formation\\Desktop\\classe.txt", FileMode.Open);
+            StreamReader reader = new StreamReader(fs);
+
+            string buffer;
+            double temp;
+
+            while (!reader.EndOfStream)
+            {
+                buffer = reader.ReadLine();
+                splitBuffer = buffer.Split(';');
+
+                temp = Double.Parse(splitBuffer[2],culture);
+                eleveTmp = new Eleve(splitBuffer[0], splitBuffer[1], temp);
+                classe.Add(eleveTmp);
+
+                
+               
+                if (!(matMoy.ContainsKey(splitBuffer[1])))
+                {
+                    matMoy.Add(splitBuffer[1], 0);
+                }
+                
+                Console.WriteLine($"{splitBuffer[0]} {splitBuffer[1]} {splitBuffer[2]}");
+            }
+
+            string[] listMatiere = classe.GroupBy(eleve => eleve.matiere).Select(g => g.Key).ToArray();
+
+            for (int i = 0; i < listMatiere.Length; i++)
+            {
+                moyMat.Add(new MoyMatiere(listMatiere[i], 0, 0));
+            }
+            /*
+            for (int i = 0; i < classe.Count; i++)
+            {
+                for (int j = 0; j < moyMat.Count; j++)
+                {
+                    if (moyMat[j].matiere == classe[i].matiere)
+                    {
+                        moyMat[j].nbEleve += 1; 
+                        //moyMat[j].somme += classe[i].note;
+                    }
+                }
+                /*foreach (MoyMatiere mat in moyMat)
+                {
+                    if(mat.matiere == classe[i].matiere)
+                    {
+                        mat.somme += classe[i].note; 
+                    }
+                }
+            }*/
+
+            
+
+            return;
         }
 
         struct QCM
@@ -275,6 +427,16 @@ namespace Exercices
                 return false;
             }
 
+        }
+
+        static StringBuilder strBuilder(int n)
+        {
+            StringBuilder str = new StringBuilder("0");
+            for (int i = 1; i <= n; i++)
+            {
+                str.Append($" - {i}");
+            }
+            return str;
         }
 
         static int[] EratosthenesSieve(int n)
