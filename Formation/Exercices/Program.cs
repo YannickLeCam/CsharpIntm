@@ -319,7 +319,8 @@ namespace Exercices
             //=========================================================================================================
             //Exercice 1
             //Le message morse est pour les long signaux sont passé de === a == mais le message reste identique 
-            //
+            //J'ai fais une struct avec le dictionnaite et les differentes methode a implémenté 
+            //le message a également dans le struct pour avoir la vérification a dans la création
             DictionnaireMorse dico = new DictionnaireMorse("==.=.==.=...==.==.==...==.=.=...=.....==.==...==.==.==...=.==.=...=.=.=...=");
             Console.WriteLine($"Le nombre de lettres est : {dico.LetterCount()} et le nombre de mots est : {dico.WordsCount()}");
             Console.WriteLine($"le message : {dico.messageCoder}");
