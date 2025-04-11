@@ -244,7 +244,23 @@ namespace Exercices
             List<string> answers1 = new List<string>();
             answers1.Add("Oui");
             answers1.Add("Non");
-            QCM Question = new QCM("Daren a-t-il 18 ans ?",answers1,"Oui",40);
+            Question question = new Question("Daren a-t-il 18 ans ?",answers1,"Non",40);
+            List<string> answers2 = new List<string>();
+            answers2.Add("1");
+            answers2.Add("2");
+            Question question2 = new Question("1+1 ?", answers2, "2", 1);
+            List<string> answer3 = new List<string>();
+            answer3.Add("Chaussures");
+            answer3.Add("Lunettes");
+            answer3.Add("Pull");
+            Question question3 = new Question("Que mets tu sur ton nez", answer3, "Lunettes", 1);
+
+            List<Question> ListQuest = new List<Question>();
+            ListQuest.Add(question);
+            ListQuest.Add(question2);
+            ListQuest.Add(question3);
+            QCM qcm = new QCM(ListQuest);
+            qcm.lancerQuizz();
 
             //====================================================================
             //Manipulation de fichier
@@ -289,9 +305,55 @@ namespace Exercices
             consDeClass();
 
             //Exercice 2
-            testingSorts(1000);
+            //Il est important de faire plusieurs mesure dans la gestion des tris, car il existe des cas favorable aux differents type de tri qui peut faire en sorte que cela omet des interations
+            //List<int> sizes = new List<int>() { 1000, 2000, 5000, 10000, 20000, 50000, 100000 }; test enoncé
+            //List<int> sizes = new List<int>() { 1000, 2000, 5000 }; test rapide
+
+            testingSorts(sizes,50);
+
+            //=========================================================================================================
+            //Serie 4
+            //=========================================================================================================
+            //Exercice 1
+            string[] morseAlph = { "=.==", "==.=.=.=", "==.=.==.=", "==.=.=", "=", "=.=.==.=", "==.==.=", "=.=.=.=", "=.=", "=.==.==.==", "==.=.==", "=.==.=.=", "==.==", "==.=", "==.==.==", "=.==.==.=", "==.==.=.==", "=.==.=", "=.=.=", "==", "=.=.==", "=.=.=.==", "=.==.==", "==.=.=.==", "==.=.==.==", "==.==.=.=" };
+            char[] alphabetAlph = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+            Dictionary<char, string> DicoMorse = new Dictionary<char, string>();
+            for (int i = 0; i < morseAlph.Length; i++)
+            {
+                DicoMorse.Add(alphabetAlph[i], morseAlph[i]);
+            }
+            //Dictionnaire liant une lettre a une combinaison morse
+
+
+
 
             Console.ReadKey();
+        }
+
+        struct Morse
+        {
+            public 
+        }
+
+
+        //Va etre l'objet qui va contenir les methodes pour manipuler le morse 
+        struct DictionnaireMorse
+        {
+            public Dictionary<char, string> dicoAlphaMorse;
+
+            public DictionnaireMorse()
+            {
+                string[] morseAlph = { "=.==", "==.=.=.=", "==.=.==.=", "==.=.=", "=", "=.=.==.=", "==.==.=", "=.=.=.=", "=.=", "=.==.==.==", "==.=.==", "=.==.=.=", "==.==", "==.=", "==.==.==", "=.==.==.=", "==.==.=.==", "=.==.=", "=.=.=", "==", "=.=.==", "=.=.=.==", "=.==.==", "==.=.=.==", "==.=.==.==", "==.==.=.=" };
+                char[] alphabetAlph = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+                Dictionary<char, string> this.dicoAlphaMorse = new Dictionary<char, string>();
+                for (int i = 0; i < morseAlph.Length; i++)
+                {
+                    dicoAlphaMorse.Add(alphabetAlph[i], morseAlph[i]);
+                }
+            }
+
+
+
         }
 
 
@@ -330,46 +392,86 @@ namespace Exercices
 
         struct SortData
         {
-            public long InsertionMean;
-            public long InsertionStd;
-            public long QuickMean;
-            public long QuickStd;
+            public double InsertionMean;
+            public double InsertionStd;
+            public double QuickMean;
+            public double QuickStd;
 
-            public SortData(long InsertionMean, long InsertionStd , long QuickMean,long QuickStd)
+            public SortData(double InsertionMean, double InsertionStd , double QuickMean,double QuickStd)
             {
                 this.InsertionMean = InsertionMean;
                 this.InsertionStd = InsertionStd;
                 this.QuickMean = QuickMean;
                 this.QuickStd = QuickStd;
             }
+
+            public string toString()
+            {
+                return $";{this.InsertionMean};{this.InsertionStd};{this.QuickMean};{this.QuickStd}";
+            }
         }
 
-        static SortData testingSorts(int n)
+        static List<SortData> testingSorts(List<int> sizes, int count)
         {
-            SortData data = new SortData();
+            List<SortData> datas = new List<SortData>();
             //Faire le calcule de la moyenne
-
-
-
-
+            long sommeTemps = 0;
             Stopwatch stpWtch = new Stopwatch();
-            int[] tabTest = arrayGenerator(n);
-            stpWtch.Start();
-            insertSort(tabTest);
-            stpWtch.Stop();
-            Console.WriteLine($"La fonction insert sort a trier en {stpWtch.ElapsedMilliseconds} ms");
-            Console.WriteLine();
-            stpWtch.Reset();
-            
 
-            int[] tabTest1 = arrayGenerator(n);
-            stpWtch.Start();
-            quickSort(tabTest1,0,tabTest1.Length-1);
-            stpWtch.Stop();
-            Console.WriteLine($"La fonction insert sort a trier en {stpWtch.ElapsedMilliseconds} ms");
+            Console.WriteLine("n;InsertionMean;InsertionStd;QuickMean;QuickStd;");
+
+            for (int i = 0; i < sizes.Count(); i++)
+            {
+                SortData dataI = new SortData();
+                sommeTemps = 0;
+                long[] tabTempIns = new long[count];
+                long[] tabTempQui = new long[count];
+
+                for (int j = 0; j < count; j++)
+                {
+                    int[] tabTest = arrayGenerator(sizes[i]);
+                    stpWtch.Start();
+                    insertSort(tabTest);
+                    stpWtch.Stop();
+                    tabTempIns[j] = stpWtch.ElapsedMilliseconds;
+                    sommeTemps += stpWtch.ElapsedMilliseconds;
+                }
+                dataI.InsertionMean = sommeTemps / count;
+                double sommeDifMoy = 0;
+                foreach  (long temps in tabTempIns)
+                {
+                    sommeDifMoy += Math.Pow(dataI.InsertionMean - temps,2);
+                }
+                dataI.InsertionStd = Math.Sqrt(sommeDifMoy / count);
 
 
-            return data;
+
+
+                stpWtch.Reset();
+                sommeDifMoy = 0;
+                sommeTemps = 0;
+                
+                for (int j = 0; j < count; j++)
+                {
+                    int[] tabTest = arrayGenerator(sizes[i]);
+                    stpWtch.Start();
+                    quickSort(tabTest, 0, tabTest.Length - 1);
+                    stpWtch.Stop();
+                    tabTempQui[j] = stpWtch.ElapsedMilliseconds;
+                    sommeTemps += stpWtch.ElapsedMilliseconds;
+                }
+                dataI.QuickMean = sommeTemps / count;
+                foreach (long temps in tabTempQui)
+                {
+                    sommeDifMoy += Math.Pow(dataI.QuickMean - temps, 2);
+                }
+                dataI.QuickStd = Math.Sqrt(sommeDifMoy / count);
+
+                datas.Add(dataI);
+                Console.WriteLine($"{sizes[i]}{dataI.toString()}");
+            }
+
+            return datas;
 
         }
 
@@ -538,13 +640,39 @@ namespace Exercices
 
         struct QCM
         {
+            public List<Question> questions;
+            public int points;
+
+
+            public QCM(List<Question> questions)
+            {
+                if (questions.Count == 0)
+                {
+                    throw (new Exception("Le nombre de question semble vide"));
+                }
+                this.questions = questions;
+                this.points = 0;
+            }
+
+            public void lancerQuizz()
+            {
+                for (int i = 0; i < this.questions.Count(); i++)
+                {
+                    this.points += this.questions[i].affiQuestion();
+                }
+                Console.WriteLine($"Vous avez eu : {points} !");
+            }
+        }
+
+        struct Question
+        {
             public string question;
             public List<string> answer;
             public string solution;
             public int weight;
 
 
-            public QCM(string question, List<string> answer , string solution , int weight)
+            public Question(string question, List<string> answer , string solution , int weight)
             {
                 if (weight < 0)
                 {
@@ -570,20 +698,27 @@ namespace Exercices
                 }
                 string reponse = Console.ReadLine();
                 bool reponseValide = false;
-                while (reponseValide)
+                while (!reponseValide)
                 {
                     try
                     {
                         result = Int32.Parse(reponse);
-                        reponseValide = true;
-                        if (this.answer[result] == this.solution)
+                        if (result-1 >= 0 && result-1 < this.answer.Count())
                         {
-                            return 1;
+
+
+                            reponseValide = true;
+                            if (this.answer[result - 1] == this.solution)
+                            {
+                                return this.weight;
+                            }
+                            else
+                            {
+                                return 0;
+                            }
                         }
-                        else
-                        {
-                            return 0;
-                        }
+                        Console.WriteLine("La reponse ne semble ne pas etre valide veuiller retaper une reponse.");
+                        reponse = Console.ReadLine();
                     }
                     catch (FormatException)
                     {
