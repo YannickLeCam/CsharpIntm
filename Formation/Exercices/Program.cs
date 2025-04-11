@@ -8,8 +8,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -309,21 +312,25 @@ namespace Exercices
             //List<int> sizes = new List<int>() { 1000, 2000, 5000, 10000, 20000, 50000, 100000 }; test enoncé
             //List<int> sizes = new List<int>() { 1000, 2000, 5000 }; test rapide
 
-            testingSorts(sizes,50);
+            //testingSorts(sizes,50);
 
             //=========================================================================================================
             //Serie 4
             //=========================================================================================================
             //Exercice 1
-            string[] morseAlph = { "=.==", "==.=.=.=", "==.=.==.=", "==.=.=", "=", "=.=.==.=", "==.==.=", "=.=.=.=", "=.=", "=.==.==.==", "==.=.==", "=.==.=.=", "==.==", "==.=", "==.==.==", "=.==.==.=", "==.==.=.==", "=.==.=", "=.=.=", "==", "=.=.==", "=.=.=.==", "=.==.==", "==.=.=.==", "==.=.==.==", "==.==.=.=" };
-            char[] alphabetAlph = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-            Dictionary<char, string> DicoMorse = new Dictionary<char, string>();
-            for (int i = 0; i < morseAlph.Length; i++)
-            {
-                DicoMorse.Add(alphabetAlph[i], morseAlph[i]);
-            }
-            //Dictionnaire liant une lettre a une combinaison morse
-
+            //Le message morse est pour les long signaux sont passé de === a == mais le message reste identique 
+            //
+            DictionnaireMorse dico = new DictionnaireMorse("==.=.==.=...==.==.==...==.=.=...=.....==.==...==.==.==...=.==.=...=.=.=...=");
+            Console.WriteLine($"Le nombre de lettres est : {dico.LetterCount()} et le nombre de mots est : {dico.WordsCount()}");
+            Console.WriteLine($"le message : {dico.messageCoder}");
+            Console.WriteLine($"La traduction est : {dico.MorseTranslation()}");
+            DictionnaireMorse dico1 = new DictionnaireMorse("==.=.==.=...==.==.==...==.=.=...=.....==.==...==.==.==...==.==.==.==.==...=.==.=...=.=.=...=");
+            //Verification teste faux
+            Console.WriteLine($"{dico1.MorseTranslation()}");
+            Console.WriteLine($"{dico.MorseEncryption("Chaussure")}");
+            //On essaye de retraduire pour voir si cela fonctionne
+            DictionnaireMorse dico2 = new DictionnaireMorse("==.=.==.=...=.=.=.=...=.==...=.=.==...=.=.=...=.=.=...=.=.==...=.==.=...=");
+            Console.WriteLine(dico2.MorseTranslation());
 
 
 
@@ -332,7 +339,9 @@ namespace Exercices
 
         struct Morse
         {
-            public 
+            public string message;
+
+
         }
 
 
@@ -340,21 +349,119 @@ namespace Exercices
         struct DictionnaireMorse
         {
             public Dictionary<char, string> dicoAlphaMorse;
+            public string messageCoder;
 
-            public DictionnaireMorse()
+            public DictionnaireMorse(string messageCoder = "")
             {
                 string[] morseAlph = { "=.==", "==.=.=.=", "==.=.==.=", "==.=.=", "=", "=.=.==.=", "==.==.=", "=.=.=.=", "=.=", "=.==.==.==", "==.=.==", "=.==.=.=", "==.==", "==.=", "==.==.==", "=.==.==.=", "==.==.=.==", "=.==.=", "=.=.=", "==", "=.=.==", "=.=.=.==", "=.==.==", "==.=.=.==", "==.=.==.==", "==.==.=.=" };
                 char[] alphabetAlph = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-                Dictionary<char, string> this.dicoAlphaMorse = new Dictionary<char, string>();
+                this.dicoAlphaMorse = new Dictionary<char, string>();
                 for (int i = 0; i < morseAlph.Length; i++)
                 {
                     dicoAlphaMorse.Add(alphabetAlph[i], morseAlph[i]);
                 }
+                //verification du message coder
+                for (int i = 0; i < messageCoder.Length; i++)
+                {
+                    if (messageCoder[i] != '.' && messageCoder[i] != '=')
+                    {
+                        throw new ArgumentException("Le message envoyer ne semble pas correcte");
+                    }
+                    //Faire en sorte de trouver les mots
+                }
+                this.messageCoder = messageCoder;
             }
 
+            public int LetterCount()
+            {
+                string patern = "(\\.{2,})";
+                string[] subStr = Regex.Split(this.messageCoder, patern);
+                subStr =subStr.Where(str => !str.Contains("...")).ToArray();
+                return subStr.Count();
+            }
+
+            public int WordsCount()
+            {
+                string patern = "(\\.{5,})";
+                string[] subStr = Regex.Split(this.messageCoder, patern);
+                subStr = subStr.Where(str => !str.Contains(".....")).ToArray();
+                return subStr.Count();
+            }
+            public string MorseTranslation()
+            {
+                StringBuilder strBuilder = new StringBuilder();
+                string patern = "(\\.{5,})";
+                string[] subStr = Regex.Split(this.messageCoder, patern);
+                string[] words= subStr.Where(str => !str.Contains(".....")).ToArray();
+                for (int i = 0; i < words.Length; i++)
+                {
+                    patern = "(\\.{2,})";
+                    subStr = Regex.Split(words[i], patern);
+                    string[] lettres = subStr.Where(str => !str.Contains("...")).ToArray();
+                    for (int j = 0; j < lettres.Length; j++)
+                    {
+                        /*char test = this.dicoalphamorse.where(dico => dico.value == lettres[j]);
+                          tempstringtrad[cpt] = test;
+                          cpt++;*/
+                        bool lettreFnd = false;
+                        foreach (KeyValuePair<char,string> keyValuePair in this.dicoAlphaMorse)
+                        {
+                            if(keyValuePair.Value == lettres[j])
+                            {
+                                lettreFnd = true;
+                                strBuilder.Append(keyValuePair.Key);
+                            }
+
+                        }
+                        if (!lettreFnd)
+                        {
+                            strBuilder.Append('+');
+                        }
+                    }
+                    if(i != words.Length - 1)
+                    {
+                        strBuilder.Append(' ');
+                    }
+
+                }
+
+                return strBuilder.ToString().Trim();
+            }
+            public string MorseEncryption(string sentence)
+            {
+                StringBuilder strBuild = new StringBuilder();
+                sentence = sentence.ToUpper();
 
 
+                for (int i = 0; i < sentence.Length; i++)
+                {
+                    if (sentence[i] == ' ')
+                    {
+                        strBuild.Append(".....");
+                    }
+                    else
+                    {
+                        foreach (KeyValuePair<char, string> kvp in this.dicoAlphaMorse)
+                        {
+                            if (kvp.Key == sentence[i])
+                            {
+                                strBuild.Append(kvp.Value);
+                            }
+                        }
+                    }
+
+                    if(i!= sentence.Length - 1)
+                    {
+                        strBuild.Append("...");
+                    }
+
+                }
+
+                return strBuild.ToString();
+            } 
         }
+
+
 
 
         struct Eleve
