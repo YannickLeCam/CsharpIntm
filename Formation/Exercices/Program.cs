@@ -334,16 +334,225 @@ namespace Exercices
             DictionnaireMorse dico2 = new DictionnaireMorse("==.=.==.=...=.=.=.=...=.==...=.=.==...=.=.=...=.=.=...=.=.==...=.==.=...=");
             Console.WriteLine(dico2.MorseTranslation());
 
+            //Exercice 2
+            //J'ai décidé d'utiliser une stack dans la struct afin de comparer plus éfficacement les entrées 
+            parentheseVerify par = new parentheseVerify(new Stack<char>());
+            Console.WriteLine("Renvoie true " + par.BracketsControls("[{}[]]()"));
+            Console.WriteLine("Renvoie false " + par.BracketsControls("[({)}[]]()"));
+            Console.WriteLine("Renvoie true " + par.BracketsControls("[sdssdqfqf{skjsg}gsf[qf]]qfdsfq()"));
+
+            //Exercices 3 
+            Console.WriteLine("DEBUTE EXERCICE 3");
+            PhoneBook PB = new PhoneBook();
+            Console.WriteLine("Test isValidNumber");
+            Console.WriteLine("Renvoie true " + PB.isValidPhoneNumber("0679415123"));
+            Console.WriteLine("Renvoie true " + PB.isValidPhoneNumber("+33679415123"));
+            Console.WriteLine("Renvoie false " + PB.isValidPhoneNumber("06794151"));
+            Console.WriteLine("Renvoie false " + PB.isValidPhoneNumber("0679415156465"));
+
+            Console.WriteLine("Affichage du PB vide");
+            PB.DisplayPhoneBook();
+            PB.AddPhoneNumber("0679415123", "Yann");
+            PB.AddPhoneNumber("0654842315", "Martine");
+            PB.AddPhoneNumber("0406050505", "Joseph");
+            PB.AddPhoneNumber("4512365458", "Error");
+            PB.AddPhoneNumber("022222222222222", "Error2");
+            Console.WriteLine("Affichage du PB après insert");
+            PB.DisplayPhoneBook();
+            PB.DeletePhoneNumber("02020200202");//False
+            PB.DeletePhoneNumber("0679415123");//true
+            Console.WriteLine("Affichage du PB après delete");
+            PB.DisplayPhoneBook();
 
 
             Console.ReadKey();
         }
 
 
+        struct Contact
+        {
+            //J'ai décider de le mettre en string car il peut contenir des char autre comme un "+33" et cette donnée ne va pas etre modifié 
+            public string phoneNumber;
+            public string name;
+
+            public Contact(string phoneNumber,string name)
+            {
+                this.phoneNumber = phoneNumber;
+                this.name = name;
+            }
+        }
+
+
+        struct PhoneBook
+        {
+            List<Contact> listContact; 
+
+            public bool isValidPhoneNumber(string phoneNumber)
+            { 
+                if (phoneNumber[0] == '+')
+                {
+                    StringBuilder numtel = new StringBuilder();
+                    numtel.Append('0' + phoneNumber.Substring(3));
+                    phoneNumber = numtel.ToString();
+                }
+                if (phoneNumber[0] != '0' || phoneNumber[1] == '0')
+                {
+                    return false;
+                }
+                
+                if(Regex.IsMatch(phoneNumber, "(^\\d{10}$)"))
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public bool ContainsPhoneContact(string phoneNumber)
+            {
+                if(this.listContact == null)
+                {
+                    return false;
+                }
+                for (int i = 0; i < this.listContact.Count(); i++)
+                {
+                    if (this.listContact[i].phoneNumber == phoneNumber)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public void PhoneContact(string phoneNumber)
+            {
+                if (this.listContact == null)
+                {
+                    throw new Exception($"Le numéro \"{phoneNumber}\" ne semble ne pas être présent, annuraire vide . . . ");
+                    return;
+                }
+                for (int i = 0; i < this.listContact.Count(); i++)
+                {
+                    if (this.listContact[i].phoneNumber == phoneNumber)
+                    {
+                        Console.WriteLine($"{phoneNumber} : {this.listContact[i].name}");
+                        //On stop car le numero ne peut etre présent qu'une fois dans l'annuaire
+                        return;
+                    }
+                }
+                throw new Exception($"Le numéro \"{phoneNumber}\" ne semble ne pas être présent ");
+
+            }
+
+            public bool AddPhoneNumber(string phoneNumber, string name)
+            {
+                if (!isValidPhoneNumber(phoneNumber) || ContainsPhoneContact(phoneNumber))
+                {
+                    return false;
+                }
+                if (this.listContact == null)
+                {
+                    this.listContact = new List<Contact>();
+                }
+                this.listContact.Add(new Contact(phoneNumber, name));
+                return false;
+            }
+
+            public bool DeletePhoneNumber(string phoneNumber)
+            {
+                if (this.listContact == null)
+                {
+                    return false;
+                }
+                for (int i = 0; i < this.listContact.Count(); i++)
+                {
+                    if (this.listContact[i].phoneNumber == phoneNumber)
+                    {
+                        this.listContact.Remove(this.listContact[i]);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public void DisplayPhoneBook()
+            {
+                Console.WriteLine("Annuaire téléphonique :");
+                Console.WriteLine("------------------------");
+                
+                if (this.listContact == null || this.listContact.Count() == 0 )
+                {
+                    Console.WriteLine("Pas de numéros téléphoniques . . . ");
+                }
+                else
+                {
+                    foreach ( Contact contact in this.listContact)
+                    {
+                        Console.WriteLine($"{contact.phoneNumber} : {contact.name}");
+                    }
+                }
+                Console.WriteLine("------------------------");
+            }
+
+        }
+
         struct parentheseVerify
         {
-            public string message;
+            public Stack<char> stackVerif;
 
+            //J'ai du mettre un élément dans le constructeur car renvoyait une erreur de compile sinon
+            public parentheseVerify(Stack<char> stackVide)
+            {
+                this.stackVerif = new Stack<char>();
+            }
+
+            public bool BracketsControls(string sentence)
+            {
+                for (int i = 0; i < sentence.Length; i++)
+                {
+                    char test = sentence[i]; 
+                    switch (sentence[i])
+                    {
+                        case '(':
+                        case '[':
+                        case '{':
+                            this.stackVerif.Push(sentence[i]);
+                            break;
+                        case '}':
+                            if (this.stackVerif.Peek() == '{')
+                            {
+                                this.stackVerif.Pop();
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            break;
+                        case ']':
+                            if (this.stackVerif.Peek() == '[')
+                            {
+                                this.stackVerif.Pop();
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            break;
+                        case ')':
+                            if (this.stackVerif.Peek() == '(')
+                            {
+                                this.stackVerif.Pop();
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return true;
+            }
 
         }
 
