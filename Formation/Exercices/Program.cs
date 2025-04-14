@@ -339,13 +339,13 @@ namespace Exercices
             Console.ReadKey();
         }
 
-        struct Morse
+
+        struct parentheseVerify
         {
             public string message;
 
 
         }
-
 
         //Va etre l'objet qui va contenir les methodes pour manipuler le morse 
         struct DictionnaireMorse
