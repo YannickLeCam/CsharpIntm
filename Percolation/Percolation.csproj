@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{43EE41FA-BA42-4043-B2E5-1BD1D960913C}</ProjectGuid>
+    <ProjectGuid>{615A0EA4-19B3-4DDE-BECC-65891EA73CA8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ProjetS2</RootNamespace>
-    <AssemblyName>ProjetS2</AssemblyName>
+    <RootNamespace>Percolation</RootNamespace>
+    <AssemblyName>Percolation</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,11 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compte.cs" />
+    <Compile Include="Percolation.cs" />
+    <Compile Include="PercolationSimulation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatutTransaction.cs" />
-    <Compile Include="Transaction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

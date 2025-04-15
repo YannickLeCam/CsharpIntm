@@ -95,6 +95,8 @@ namespace Exercices
             
         }
 
+
+
         static void Main(string[] args)
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
@@ -263,7 +265,7 @@ namespace Exercices
             ListQuest.Add(question2);
             ListQuest.Add(question3);
             QCM qcm = new QCM(ListQuest);
-            qcm.lancerQuizz();
+            //qcm.lancerQuizz();
 
             //====================================================================
             //Manipulation de fichier
@@ -363,10 +365,89 @@ namespace Exercices
             PB.DeletePhoneNumber("0679415123");//true
             Console.WriteLine("Affichage du PB après delete");
             PB.DisplayPhoneBook();
-
+            //Exercices 4
+            //1. Pour le debut et la fin d'une list c'est un 1 seule, cependant pour inserer au milieu il est nécéssaire de parcourir la liste
+            //2. Dans le cas d'une liste non trié il sera de N comparaison cependant pour une liste trié nous pouvons alors utiliser la recherche dichotomique donc elle serra moindre
+            SortedDictionary<DateTime, DateTime> schedule;
+            BusinessSchedule BS = new BusinessSchedule();
+            BS.DisplayMeetings();
 
             Console.ReadKey();
         }
+
+        struct BusinessSchedule
+        {
+            public SortedDictionary<DateTime,DateTime> Schedule;
+            public DateTime DateDepart;
+            public DateTime DateFin;
+            //= new DateTime(2020,01,01)
+            // = new DateTime(2030, 12, 31)
+            public BusinessSchedule(SortedDictionary<DateTime,DateTime> schedule, DateTime dateDepart = default(DateTime), DateTime dateFin = default(DateTime))
+            {
+                if (dateDepart == default(DateTime))
+                {
+                    this.DateDepart = new DateTime(2020, 01, 01);
+                }
+                else
+                {
+                    this.DateDepart = dateDepart;
+                }
+                if(dateFin == default(DateTime))
+                {
+                    this.DateFin = new DateTime(2030, 12, 31);
+                }
+                else
+                {
+                    this.DateFin = dateFin;
+                }
+                
+                this.Schedule = schedule;
+
+            }
+
+            public bool isEmpty()
+            {
+                if(this.Schedule == null || this.Schedule.Count()==0)
+                {
+                    return true;               
+                }
+                return false;
+            }
+
+            public void SetRangeOfDates(DateTime begin, DateTime end)
+            {
+                if(DateTime.Compare(begin,end) >= 0 || !this.isEmpty())
+                {
+                    throw new Exception("Les dates ne semble ne pas etre valides");
+                }
+                this.DateDepart = begin;
+                this.DateFin = end;
+            }
+
+            public void DisplayMeetings()
+            {
+                Console.WriteLine($"Emploi du temps : {this.DateDepart.ToString("G")} - {this.DateFin.ToString("G")}");
+                Console.WriteLine("----------------------------------------------------------------------------");
+                if (this.isEmpty())
+                {
+                    Console.WriteLine("Pas de réunions programmées");
+                }
+                else
+                {
+                    int cpt = 1;
+                    foreach (KeyValuePair<DateTime,DateTime> kvp in this.Schedule)
+                    {
+                        Console.WriteLine($"Réunion {cpt}   : {kvp.Key.ToString("G")} - {kvp.Value.ToString("G")} ");
+                    }
+                }
+                Console.WriteLine("----------------------------------------------------------------------------");
+            }
+
+
+        }
+
+
+
 
 
         struct Contact
@@ -385,6 +466,8 @@ namespace Exercices
 
         struct PhoneBook
         {
+            //ON ne peut pas l'initialiser de base comme sur la ligne suivante
+            //List<Contact> listContact = new List<Contact>();
             List<Contact> listContact; 
 
             public bool isValidPhoneNumber(string phoneNumber)
@@ -550,6 +633,11 @@ namespace Exercices
                         default:
                             break;
                     }
+                }
+                //Gere le cas ou la parenthèse a été ouverte mais n'a jamais été fermée
+                if(this.stackVerif.Count() != 0)
+                {
+                    return false;
                 }
                 return true;
             }
