@@ -30,12 +30,12 @@ namespace ProjetP1
             {
                 return this._historique;
             }
-            set
-            {
-                this._historique.Add(value);
-            }
         }
 
+        public void ajoutTransactionHistorique(Transaction transaction)
+        {
+            _historique.Add(transaction);
+        }
 
         public int Id
         {
@@ -49,6 +49,12 @@ namespace ProjetP1
             }
         }
 
+
+        public Compte()
+        {
+            this._id=0;
+            this._solde = 0;
+        }
         public Compte(int id, decimal solde = 0)
         {
             this._id = id;
@@ -56,6 +62,34 @@ namespace ProjetP1
             this._historique = new List<Transaction>();
         }
 
+        public bool VerifyTransaction(decimal montant)
+        {
+            decimal sumMontant = this._historique.Where(histo => histo.Expediteur == this._id).Take(10).Sum(histo => histo.Montant);
+            sumMontant += montant;
+            if (montant > this.Solde || sumMontant > 1000) 
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool Withdraw(decimal montant)
+        {
+            //On fait une verification tout de meme 
+            if (this.VerifyTransaction(montant))
+            {
+                this.Solde -= montant;
+                return true;
+            }
+            return false;
+        }
+
+        public void Deposit(decimal montant)
+        {
+            this._solde += montant;
+        }
+
+        
 
 
     }

@@ -8,18 +8,25 @@ namespace ProjetP1
 {
     public class Transaction
     {
-        public int id;
-        public decimal montant;
-        public int expediteur;
-        public int destinataire;
+        private int _id;
+        private decimal _montant;
+        private int _expediteur;
+        private int _destinataire;
 
 
         public Transaction(int id, decimal montant, int expediteur, int destinataire)
         {
-            this.id = id;
-            this.montant = montant;
-            this.expediteur = expediteur;
-            this.destinataire = destinataire;
+            this._id = id;
+            this._montant = montant;
+            this._expediteur = expediteur;
+            this._destinataire = destinataire;
         }
+
+        public int Id { get { return _id; } }
+
+        public decimal Montant {get { return _montant; } }
+        public int Expediteur {get { return _expediteur; } }
+        public int Destinataire {get { return _destinataire; } }
+        
     }
 }
