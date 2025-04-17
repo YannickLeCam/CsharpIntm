@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,28 +10,31 @@ namespace ProjetP1
 {
     internal class LectureDonnee
     {
-        private readonly List<Transaction> transactions = new List<Transaction>();
-        private readonly List<Compte> comptes = new List<Compte>();
+        private Banque banque = new Banque();
 
+        public Banque Banque { get { return banque; } }
 
-        public LectureDonnee(string cheminFichierCompte , string cheminFichierTransaction )
+        public LectureDonnee(string cheminFichierCompte, string cheminFichierTransaction)
         {
             using (FileStream fsRetour = new FileStream(cheminFichierCompte, FileMode.Open))
             using (StreamReader reader = new StreamReader(fsRetour))
             {
-                while (reader.EndOfStream) 
+                while (!reader.EndOfStream)
                 {
+
                     string line = reader.ReadLine();
-                    string[] elemLine = line.Split(';');
+                    string purifiedLine = line.TrimEnd(';');
+                    string[] elemLine = purifiedLine.Split(';');
                     try
                     {
-                        if (elemLine.Length == 2)
+
+                        if (elemLine.Length == 2 )
                         {
-                            Compte compte = new Compte(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]));
+                            this.banque.CreationAjoutCompte(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]));
                         }
                         else if (elemLine.Length == 1)
                         {
-                            Compte compte = new Compte(Int32.Parse(elemLine[0]));
+                            this.banque.CreationAjoutCompte(Int32.Parse(elemLine[0]));
                         }
                         else
                         {
@@ -47,13 +51,18 @@ namespace ProjetP1
             using (FileStream fsRetour = new FileStream(cheminFichierTransaction, FileMode.Open))
             using (StreamReader reader = new StreamReader(fsRetour))
             {
-                while (reader.EndOfStream)
+                while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();
                     string[] elemLine = line.Split(';');
                     try
                     {
-                         Transaction compte = new Transaction(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]), Int32.Parse(elemLine[2]), Int32.Parse(elemLine[3]));
+                        if (elemLine.Length < 4)
+                        {
+                            throw new DataException("Les données ne semble pas etre possible a traiter");
+                        }
+
+                        this.banque.CreationAjoutTransaction(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]), Int32.Parse(elemLine[2]), Int32.Parse(elemLine[3]));
                     }
                     catch (Exception)
                     {
@@ -62,5 +71,6 @@ namespace ProjetP1
                     }
                 }
             }
+        }
     }
 }

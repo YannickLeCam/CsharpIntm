@@ -48,6 +48,7 @@
     <Compile Include="LectureDonnee.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sortie.cs" />
     <Compile Include="StatutTransaction.cs" />
     <Compile Include="Transaction.cs" />
   </ItemGroup>

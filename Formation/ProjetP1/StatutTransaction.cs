@@ -6,15 +6,21 @@ using System.Threading.Tasks;
 
 namespace ProjetP1
 {
-    internal class StatutTransaction
+    public class StatutTransaction
     {
-        public int id;
-        public bool statut;
+        private int _id;
+        private bool _statut;
 
-        public StatutTransaction(int id, bool statut)
+        public int Id { get { return _id; } }
+        public string Statut { get {
+                if (_statut) { return "OK"; }
+                else { return "KO"; }
+            } }
+
+        public StatutTransaction(int id , bool statut) 
         {
-            this.id = id;
-            this.statut = statut;
+            this._id = id;
+            this._statut = statut;
         }
     }
 }

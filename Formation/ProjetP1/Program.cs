@@ -10,20 +10,30 @@ namespace ProjetP1
     {
         static void Main(string[] args)
         {
-            Compte compte = new Compte(1, 1000);
-            Compte compte1 = new Compte(2);
-            Compte compte2 = new Compte(3, 500);
+
+            LectureDonnee datas = new LectureDonnee("C:\\Users\\Formation\\Desktop\\Comptes.txt", "C:\\Users\\Formation\\Desktop\\Transaction.txt");
+
+            Banque banque = datas.Banque;
+            banque.faireTransactions();
+            Sortie sortie = new Sortie(banque);
+            sortie.AffichageSortie("C:\\Users\\Formation\\Desktop\\Sortie.txt");
 
             
 
-            Transaction tran = new Transaction(1, 200, 1, 2);
-            Transaction tran1 = new Transaction(2, 500, 0, 2);
-            Transaction tran2 = new Transaction(3 ,1000,1,2);
-            Transaction tran3 = new Transaction(4, 300, 3, 1);
-            Transaction tran4 = new Transaction(5, 200, 0, 2);
-            Transaction tran5 = new Transaction(6, 100, 1, 0);
-            Banque banque = new Banque();
-            banque.comptes.Add(compte);
+
+            /*compte compte = new compte(1, 1000);
+            compte compte1 = new compte(2);
+            compte compte2 = new compte(3, 500);
+            
+            
+
+            transaction tran = new transaction(1, 200, 1, 2);
+            transaction tran1 = new transaction(2, 500, 0, 2);
+            transaction tran2 = new transaction(3 ,1000,1,2);
+            transaction tran3 = new transaction(4, 300, 3, 1);
+            transaction tran4 = new transaction(5, 200, 0, 2);
+            transaction tran5 = new transaction(6, 100, 1, 0);*/
+            /*banque.comptes.Add(compte);
             banque.comptes.Add(compte1);
             banque.comptes.Add(compte2);
             banque.transactions.Add(tran);
@@ -41,7 +51,7 @@ namespace ProjetP1
             compte.ajoutTransactionHistorique(tran);
             compte.ajoutTransactionHistorique(tran5);
             compte.ajoutTransactionHistorique(tran3);
-            bool test = compte.VerifyTransaction(500);
+            bool test = compte.VerifyTransaction(500);*/
             Console.ReadLine();
         }
     }
