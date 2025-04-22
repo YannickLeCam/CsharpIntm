@@ -12,7 +12,7 @@ namespace ProjetP2
         private List<Transaction> _transactions = new List<Transaction>();
         private List<Compte> _comptes = new List<Compte>();
         private List<StatutTransaction> _statutTransactions = new List<StatutTransaction>();
-        private List<Gestionnaire> _
+        private List<Gestionnaire> _gestionnaireList = new List<Gestionnaire>();
 
         //Pour pouvoir générer une banque par défault
         public Banque() { }
@@ -22,6 +22,8 @@ namespace ProjetP2
         {
             this._transactions = transactions;
             this._comptes = comptes;
+            this.Transactions.Sort();
+            this.Operation.Sort();
         }
 
         public List<Compte> Comptes { get { return _comptes; } }
@@ -29,7 +31,7 @@ namespace ProjetP2
         public List<StatutTransaction> StatutTransactions { get { return _statutTransactions; } }
 
         //Pouvoir ajouter un compte en créer un
-        public void CreationAjoutCompte(int id, decimal solde = 0)
+        public void CreationAjoutCompte(int id,int idGestionnaire,DateTime dateCreation , decimal solde = 0)
         {
             if (IsAccountExist(id))
             {
@@ -43,17 +45,37 @@ namespace ProjetP2
                 //throw new ArgumentException("Le solde ne semble ne pas etre correct");
                 return;
             }
-            this._comptes.Add(new Compte(id, solde));
+            Gestionnaire gestionnaire = new Gestionnaire();
+            foreach (Gestionnaire gest in _gestionnaireList)
+            {
+                if(idGestionnaire == gest.Id)
+                {
+                    gestionnaire = gest;
+                }
+            }
+            //
+            if(gestionnaire.Id == 0)
+            {
+                //throw new ArgumentException("Le gestionnaire ne semble pas exister"); 
+                return ;
+            }
+
+
+            this._comptes.Add(new Compte(id ,gestionnaire,dateCreation,solde ));
         }
         //Pourvoir ajouter une transaction et en créer une
-        public void CreationAjoutTransaction(int id, decimal montant, int expediteur, int destinataire)
+        public void CreationAjoutTransaction(int id, decimal montant, int expediteur, int destinataire, DateTime dateTransaction)
         {
-            this._transactions.Add(new Transaction(id, montant, expediteur, destinataire));
+            this._transactions.Add(new Transaction(id, montant, expediteur, destinataire,dateTransaction));
         }
 
         public void CreationAjoutGestionnaire(int id, string type, int nbTransactions)
         {
-
+            if (IsGestionnaireExist(id))
+            {
+                return;
+            }
+            _gestionnaireList.Add(new Gestionnaire(id, type, nbTransactions));
         }
         public bool IsAccountExist(int id)
         {
@@ -67,11 +89,25 @@ namespace ProjetP2
             return false;
         }
 
+        public bool IsGestionnaireExist(int id)
+        {
+            foreach(Gestionnaire gestionnaire in _gestionnaireList)
+            {
+                if(gestionnaire.Id == id)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
 
         public void faireTransactions()
         {
             foreach (Transaction transaction in this._transactions)
             {
+                //On doit vérifier les date du compte avec celle de la transaction
                 //SI l'expediteur n'existe pas 
                 if (!IsAccountExist(transaction.Expediteur) && transaction.Expediteur != 0)
                 {

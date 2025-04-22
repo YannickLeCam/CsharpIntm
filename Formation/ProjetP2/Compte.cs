@@ -11,6 +11,9 @@ namespace ProjetP2
         private int _id;
         private decimal _solde;
         private List<Transaction> _historique = new List<Transaction>();
+        private Gestionnaire _gestionnaire;
+        private DateTime _dateOuverture;
+        private DateTime _dateFermeture;
 
         public decimal Solde
         {
@@ -55,11 +58,18 @@ namespace ProjetP2
             this._id=0;
             this._solde = 0;
         }
-        public Compte(int id, decimal solde = 0)
+
+        public Compte(int id,Gestionnaire gestionnaire,DateTime dateOuverture, decimal solde = 0)
         {
             this._id = id;
             this._solde = solde;
+            this._gestionnaire = gestionnaire;
             this._historique = new List<Transaction>();
+        }
+
+        public void ChangeGestionnaire()
+        {
+
         }
 
         public bool VerifyTransaction(decimal montant)

@@ -16,6 +16,7 @@ namespace ProjetP2
 
         public LectureDonnee(string cheminFichierCompte, string cheminFichierTransaction)
         {
+            //verifier si le fichier exist 
             using (FileStream fsRetour = new FileStream(cheminFichierCompte, FileMode.Open))
             using (StreamReader reader = new StreamReader(fsRetour))
             {
@@ -28,13 +29,13 @@ namespace ProjetP2
                     try
                     {
 
-                        if (elemLine.Length == 2 )
+                        if (elemLine.Length == 4 )
                         {
-                            this.banque.CreationAjoutCompte(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]));
+                            this.banque.CreationAjoutCompte(Int32.Parse(elemLine[0]), Int32.Parse(elemLine[1]), DateTime.Parse(elemLine[2]), Decimal.Parse(elemLine[3]));
                         }
                         else if (elemLine.Length == 1)
                         {
-                            this.banque.CreationAjoutCompte(Int32.Parse(elemLine[0]));
+                            this.banque.CreationAjoutCompte(Int32.Parse(elemLine[0]), Int32.Parse(elemLine[1]), DateTime.Parse(elemLine[2]));
                         }
                         else
                         {
@@ -57,12 +58,12 @@ namespace ProjetP2
                     string[] elemLine = line.Split(';');
                     try
                     {
-                        if (elemLine.Length < 4)
+                        if (elemLine.Length < 5)
                         {
                             throw new DataException("Les données ne semble pas etre possible a traiter");
                         }
 
-                        this.banque.CreationAjoutTransaction(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]), Int32.Parse(elemLine[2]), Int32.Parse(elemLine[3]));
+                        this.banque.CreationAjoutTransaction(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[2]), Int32.Parse(elemLine[3]), Int32.Parse(elemLine[4]) , DateTime.Parse(elemLine[1]);
                     }
                     catch (Exception)
                     {
