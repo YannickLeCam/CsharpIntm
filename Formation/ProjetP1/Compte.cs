@@ -37,6 +37,7 @@ namespace ProjetP1
             _historique.Add(transaction);
         }
 
+        // Les propriétés auto-implémentées reviennent au même dans ce cas. 
         public int Id
         {
             get
@@ -75,7 +76,7 @@ namespace ProjetP1
 
         public bool Withdraw(decimal montant)
         {
-            //On fait une verification tout de meme 
+            // On fait une verification tout de même 
             if (this.VerifyTransaction(montant))
             {
                 this.Solde -= montant;
