@@ -16,6 +16,7 @@ namespace ProjetP2
         public string Type { get { return _type; } }
         public int NbTransactions { get { return _nbTransactions; } }
 
+        //Un gestionnaire ne peut avoir l'id 0
         public Gestionnaire()
         {
 
@@ -41,5 +42,6 @@ namespace ProjetP2
             _type = type;
             _nbTransactions = nbTransactions;
         }
+
     }
 }

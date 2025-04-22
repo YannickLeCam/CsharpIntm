@@ -17,9 +17,9 @@ namespace ProjetP2
             this._banque = banque;
         }
 
-        public void AffichageSortie(string cheminFichierSortie)
+        public void AffichageSortie(string cheminFichierSortieTransactions,string cheminFichierSortieOperations)
         {
-            using (FileStream fsRetour = new FileStream(cheminFichierSortie, FileMode.OpenOrCreate)) 
+            using (FileStream fsRetour = new FileStream(cheminFichierSortieTransactions, FileMode.OpenOrCreate)) 
             using (StreamWriter writer = new StreamWriter(fsRetour))
             {
                 //En-tete
@@ -37,14 +37,37 @@ namespace ProjetP2
                 }
                 Console.WriteLine();
 
-                foreach (Transaction transaction in this._banque.Transactions)
+                foreach (StatutTransaction statut in this._banque.StatutTransactions)
                 {
-                    StatutTransaction statut = this._banque.StatutTransactions.Where(s => s.Id == transaction.Id).First();
+                    //StatutTransaction statut = this._banque.StatutTransactions.Where(s => s.Id == transaction.Id).First();
                     writer.WriteLine($"{statut.Id};{statut.Statut}");
                 }
             }
+            using (FileStream fsRetour = new FileStream(cheminFichierSortieOperations, FileMode.OpenOrCreate))
+            using (StreamWriter writer = new StreamWriter(fsRetour))
+            {
+                //En-tete
+                Console.WriteLine("Etat des comptes final");
+                Console.Write("Sorties;");
+                foreach (Compte compte in this._banque.Comptes)
+                {
+                    Console.Write($"Solde Compte {compte.Id};");
+                }
+                Console.WriteLine();
+                Console.Write($"    |");
+                foreach (Compte compte in this._banque.Comptes)
+                {
+                    Console.Write($"{compte.Solde} |");
+                }
+                Console.WriteLine();
 
-           
+                foreach (StatutOperation statutOpe in this._banque.StatutOperations)
+                {
+                    writer.WriteLine($"{statutOpe.Id};{statutOpe.Statut}");
+                }
+            }
+
+
         }
     }
 }

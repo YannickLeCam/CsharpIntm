@@ -10,7 +10,11 @@ namespace ProjetP2
     {
         static void Main(string[] args)
         {
-
+            LectureDonnee datas = new LectureDonnee("C:\\Users\\Formation\\Desktop\\Comptes.txt", "C:\\Users\\Formation\\Desktop\\Transactions.txt", "C:\\Users\\Formation\\Desktop\\Gestionnaires.txt");
+            Banque banque = datas.Banque;
+            banque.ActiverBanque();
+            Sortie sortie = new Sortie(banque);
+            sortie.AffichageSortie("C:\\Users\\Formation\\Desktop\\SortieTransactions.txt", "C:\\Users\\Formation\\Desktop\\SortieOperations.txt");
         }
     }
 }

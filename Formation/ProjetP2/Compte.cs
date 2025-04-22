@@ -52,6 +52,31 @@ namespace ProjetP2
             }
         }
 
+        public Gestionnaire Gestionnaire
+        {
+            get { return this._gestionnaire; }
+            set { this._gestionnaire = value; }
+        }
+
+        public DateTime DateOuverture
+        {
+            get { return _dateOuverture; }
+            set { this.DateOuverture = value; } 
+        }
+
+        public DateTime DateFermeture
+        {
+            get
+            {
+                return this._dateFermeture;
+            }
+            set
+            {
+                this._dateFermeture = value;
+            }
+        }
+
+
 
         public Compte()
         {
@@ -67,28 +92,34 @@ namespace ProjetP2
             this._historique = new List<Transaction>();
         }
 
-        public void ChangeGestionnaire()
+        public bool VerifyTransaction(decimal montant, DateTime dateTransaction)
         {
+            List<Transaction> listTransaction = this._historique.Where(histo => histo.Expediteur == this._id && histo.DateTransaction.AddDays(7) >= dateTransaction).ToList();
 
-        }
-
-        public bool VerifyTransaction(decimal montant)
-        {
-            decimal sumMontant = this._historique.Where(histo => histo.Expediteur == this._id).Take(10).Sum(histo => histo.Montant);
+            decimal sumMontant = listTransaction.Sum(histo => histo.Montant);
             sumMontant += montant;
-            if (montant > this.Solde || sumMontant > 1000) 
+            if (montant > this.Solde || sumMontant > 2000 || listTransaction.Count()+1 > this._gestionnaire.NbTransactions) 
             {
                 return false;
             }
             return true;
         }
 
-        public bool Withdraw(decimal montant)
-        {
-            //On fait une verification tout de meme 
-            if (this.VerifyTransaction(montant))
+        public bool Withdraw(decimal montant , DateTime dateTransaction)
+        { 
+            if(VerifyTransaction(montant, dateTransaction))
             {
                 this.Solde -= montant;
+                return true;
+            }
+            return false;
+            
+        }
+
+        public bool IsActif(DateTime date)
+        { 
+            if(this._dateFermeture == null || date < this._dateFermeture)
+            {
                 return true;
             }
             return false;

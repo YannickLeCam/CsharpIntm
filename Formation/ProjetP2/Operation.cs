@@ -43,7 +43,7 @@ namespace ProjetP2
             get { return this._typeOperation; }
         }
 
-
+        //Operation crétion de compte
         public Operation(int id, DateTime date, int entree, decimal solde = 0 )
         {
             this._id = id;
@@ -52,6 +52,7 @@ namespace ProjetP2
             this._entree = entree;
             this._typeOperation = 0; 
         }
+        //Operation modification de gestionnaire
         public Operation(int id, DateTime date, int entree, int sortie)
         {
             this._id=id;
@@ -60,6 +61,7 @@ namespace ProjetP2
             this._sortie=sortie;
             this._typeOperation=1;
         }
+        //Opération de supression de compte
         public Operation(int id, DateTime date , int sortie)
         {
             this._id = id;
