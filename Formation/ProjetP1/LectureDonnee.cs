@@ -16,6 +16,7 @@ namespace ProjetP1
 
         public LectureDonnee(string cheminFichierCompte, string cheminFichierTransaction)
         {
+            // Bonne utilisation des using, petit conseil, vérifier l'existence du fichier d'entrée
             using (FileStream fsRetour = new FileStream(cheminFichierCompte, FileMode.Open))
             using (StreamReader reader = new StreamReader(fsRetour))
             {
@@ -27,7 +28,7 @@ namespace ProjetP1
                     string[] elemLine = purifiedLine.Split(';');
                     try
                     {
-
+                        // Conseil pour les conversions, préférer les TryParse
                         if (elemLine.Length == 2 )
                         {
                             this.banque.CreationAjoutCompte(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]));
@@ -38,6 +39,8 @@ namespace ProjetP1
                         }
                         else
                         {
+                            // Radical comme manière de gérer un fichier mal alimenté. 
+                            // Le risque d'avoir une ligne mal alimentée est élevé. Voir avec les autres membres de l'équipe
                             throw new Exception("Le fichier d'entrée de compte ne semble ne pas etre correctement alimenté.");
                         }
                     }
@@ -61,7 +64,7 @@ namespace ProjetP1
                         {
                             throw new DataException("Les données ne semble pas etre possible a traiter");
                         }
-
+                        // Risque elevé d'erreur avec 4 conversions, préférence pour TryParse
                         this.banque.CreationAjoutTransaction(Int32.Parse(elemLine[0]), Decimal.Parse(elemLine[1]), Int32.Parse(elemLine[2]), Int32.Parse(elemLine[3]));
                     }
                     catch (Exception)
