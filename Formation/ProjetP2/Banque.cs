@@ -16,7 +16,9 @@ namespace ProjetP2
         private List<StatutOperation> _statutOperations = new List<StatutOperation>();
         private List<Gestionnaire> _gestionnaireList = new List<Gestionnaire>();
         private Dictionary<Gestionnaire, decimal> _fraisDeGestion = new Dictionary<Gestionnaire, decimal>();
+        private Statistique _statistique = new Statistique();
 
+ 
         //Pour pouvoir générer une banque par défault
         public Banque() { }
 
@@ -35,6 +37,22 @@ namespace ProjetP2
         public List<Transaction> Transactions { get { return _transactions; } }
         public List<StatutTransaction> StatutTransactions { get { return _statutTransactions; } }
         public List<StatutOperation> StatutOperations {  get { return _statutOperations; } }
+        public Statistique Statistique
+        {
+            get { return _statistique; }
+        }
+        public Dictionary<Gestionnaire, decimal> FraisDeGestion
+        {
+            get { return this._fraisDeGestion; }
+        }
+
+        public void RecupererStats()
+        {
+            _statistique.NbCompte = this._comptes.Count;
+            _statistique.NbTrans = this._transactions.Count;
+            _statistique.NbTransReussite = this._statutTransactions.Where(stat => stat.Statut == "OK").Count();
+            _statistique.NbTransEchouee = this._statutTransactions.Where(stat => stat.Statut == "KO").Count();
+        }
 
         public void ActiverBanque()
         {
@@ -97,6 +115,7 @@ namespace ProjetP2
                     }
                 }
             }
+            RecupererStats();
         }
 
         //Pouvoir ajouter un compte en créer un
@@ -392,6 +411,7 @@ namespace ProjetP2
                     if (expe.Withdraw(transaction.Montant,transaction.DateTransaction))
                     {
                         expe.ajoutTransactionHistorique(transaction);
+                        _statistique.TotalMontant += transaction.Montant;
                         _statutTransactions.Add(new StatutTransaction(transaction.Id, true));
                     }
                     else
@@ -413,6 +433,7 @@ namespace ProjetP2
                 desti.Deposit(transaction.Montant);
                 _statutTransactions.Add(new StatutTransaction(transaction.Id, true));
                 desti.ajoutTransactionHistorique(transaction);
+                _statistique.TotalMontant += transaction.Montant;
             }
             else
             {
@@ -425,14 +446,15 @@ namespace ProjetP2
                 {
                     
                     _statutTransactions.Add(new StatutTransaction(transaction.Id, true));
+                    _statistique.TotalMontant += transaction.Montant;
                     expe.ajoutTransactionHistorique(transaction);
                     desti.ajoutTransactionHistorique(transaction);
                     if (expe.Gestionnaire != desti.Gestionnaire) 
                     {
-                        if (expe.Gestionnaire.Type == "Entreprise")
+                        if (desti.Gestionnaire.Type == "Entreprise")
                         {
                             desti.Deposit(transaction.Montant - 10);
-                            this._fraisDeGestion[expe.Gestionnaire] += 10; 
+                            this._fraisDeGestion[desti.Gestionnaire] += 10; 
                         }
                         else
                         {
@@ -448,6 +470,7 @@ namespace ProjetP2
                 else
                 {
                     _statutTransactions.Add(new StatutTransaction(transaction.Id, false));
+                    
                 }
             }
             

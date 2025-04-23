@@ -96,9 +96,8 @@ namespace ProjetP2
         public bool VerifyTransaction(decimal montant, DateTime dateTransaction)
         {
             List<Transaction> listTransaction = this._historique.Where(histo => histo.Expediteur == this._id && histo.DateTransaction.AddDays(7) > dateTransaction).ToList();
-
-
             decimal sumMontant = listTransaction.Sum(histo => histo.Montant);
+
             decimal sumMontant2 = this._historique.Where(histo => histo.Expediteur == this._id).Take(this._gestionnaire.NbTransactions).Sum(histo => histo.Montant);
             sumMontant += montant;
             sumMontant2 += montant;

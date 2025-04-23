@@ -51,6 +51,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sortie.cs" />
+    <Compile Include="Statistique.cs" />
     <Compile Include="StatutOperation.cs" />
     <Compile Include="StatutTransaction.cs" />
     <Compile Include="Transaction.cs" />

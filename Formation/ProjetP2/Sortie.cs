@@ -22,21 +22,6 @@ namespace ProjetP2
             using (FileStream fsRetour = new FileStream(cheminFichierSortieTransactions, FileMode.OpenOrCreate)) 
             using (StreamWriter writer = new StreamWriter(fsRetour))
             {
-                //En-tete
-                Console.WriteLine("Etat des comptes final");
-                Console.Write("Sorties;");
-                foreach (Compte compte in this._banque.Comptes)
-                {
-                    Console.Write($"Solde Compte {compte.Id};");
-                }
-                Console.WriteLine();
-                Console.Write($"    |");
-                foreach (Compte compte in this._banque.Comptes)
-                {
-                    Console.Write($"{compte.Solde} |");
-                }
-                Console.WriteLine();
-
                 foreach (StatutTransaction statut in this._banque.StatutTransactions)
                 {
                     //StatutTransaction statut = this._banque.StatutTransactions.Where(s => s.Id == transaction.Id).First();
@@ -46,27 +31,21 @@ namespace ProjetP2
             using (FileStream fsRetour = new FileStream(cheminFichierSortieOperations, FileMode.OpenOrCreate))
             using (StreamWriter writer = new StreamWriter(fsRetour))
             {
-                //En-tete
-                Console.WriteLine("Etat des comptes final");
-                Console.Write("Sorties;");
-                foreach (Compte compte in this._banque.Comptes)
-                {
-                    Console.Write($"Solde Compte {compte.Id};");
-                }
-                Console.WriteLine();
-                Console.Write($"    |");
-                foreach (Compte compte in this._banque.Comptes)
-                {
-                    Console.Write($"{compte.Solde} |");
-                }
-                Console.WriteLine();
-
                 foreach (StatutOperation statutOpe in this._banque.StatutOperations)
                 {
                     writer.WriteLine($"{statutOpe.Id};{statutOpe.Statut}");
                 }
             }
 
+            _banque.Statistique.Display();
+
+            Console.WriteLine("Frais de gestion");
+            foreach (KeyValuePair<Gestionnaire,decimal> kvp in _banque.FraisDeGestion)
+            {
+                Console.WriteLine($"{kvp.Key.Id} : {kvp.Value}");
+            }
+
+            Console.ReadKey();
 
         }
     }
