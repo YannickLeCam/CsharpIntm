@@ -40,7 +40,17 @@ namespace ProjetP2
         {
             int compteurOpe = 0;
             int compteurTrans = 0;
-            while (compteurOpe != -1 && compteurTrans != -1)
+            _transactions = _transactions.OrderBy(trans => trans.DateTransaction).ToList();
+            _operations = _operations.OrderBy(ope => ope.Date).ToList();
+            if(_transactions.Count == 0)
+            {
+                compteurTrans = -1;
+            } 
+            if(_operations.Count == 0)
+            {
+                compteurOpe = -1;
+            }
+            while (compteurOpe != -1 || compteurTrans != -1)
             { 
                 //Il n'y a plus de transaction
                 if(compteurTrans == -1)
@@ -62,6 +72,7 @@ namespace ProjetP2
                     {
                         compteurTrans = -1;
                     }
+                    continue;
                 }
                 //On va traiter les demandes par ordre chronologique
                 //Dans le cas ou doit faire une Opération
@@ -125,10 +136,10 @@ namespace ProjetP2
 
         public void CreationAjoutOperation(int id, DateTime dateOperation , decimal solde , int entree , int sortie)
         {
-            if(id == 0 || IsOperationExist(id))
+/*            if(id == 0 || IsOperationExist(id))
             {
                 return;
-            }
+            }*/
             if (solde < 0)
             {
                 return;
@@ -168,7 +179,7 @@ namespace ProjetP2
             }
 
 
-            if (idGestionnaireSortant != compte.Gestionnaire.Id)
+            if (idGestionnaireEntrant != compte.Gestionnaire.Id)
             {
                 return false;
             }
@@ -178,11 +189,11 @@ namespace ProjetP2
                 return false ;
             }
             Gestionnaire newGestionnaire = new Gestionnaire();
-            if (this.IsGestionnaireExist(idGestionnaireEntrant))
+            if (this.IsGestionnaireExist(idGestionnaireSortant))
             {
                 foreach(Gestionnaire gest in this._gestionnaireList)
                 {
-                    if(gest.Id == idGestionnaireEntrant)
+                    if(gest.Id == idGestionnaireSortant)
                     {
                         newGestionnaire = gest;
                     }
@@ -219,7 +230,7 @@ namespace ProjetP2
                 return false ;
             }
 
-
+            compte.DateFermeture = date;
 
             return true;
         }
@@ -236,7 +247,9 @@ namespace ProjetP2
             {
                 return;
             }
-            _gestionnaireList.Add(new Gestionnaire(id, type, nbTransactions));
+            Gestionnaire gestionnaire = new Gestionnaire(id, type, nbTransactions);
+            _gestionnaireList.Add(gestionnaire);
+            _fraisDeGestion.Add(gestionnaire, 0);
         }
 
         public bool IsAccountExist(int id)
@@ -359,15 +372,16 @@ namespace ProjetP2
                     desti = compte;
                 }
             }
-            if (!expe.IsActif(transaction.DateTransaction) || !desti.IsActif(transaction.DateTransaction))
-            {
-                _statutTransactions.Add(new StatutTransaction(transaction.Id, false));
-                return;
-            }
+
             //Par la creation de Compte par défaut les comptes serront vu comme des guichet avec l'Id 0
             //Cas si l'utilisateur retire de l'argent dans un guichet
             if (transaction.Destinataire == 0)
             {
+                if (!expe.IsActif(transaction.DateTransaction))
+                {
+                    _statutTransactions.Add(new StatutTransaction(transaction.Id, false));
+                    return;
+                }
 
                 if (expe.Id == 0)
                 {
@@ -377,6 +391,7 @@ namespace ProjetP2
                 {
                     if (expe.Withdraw(transaction.Montant,transaction.DateTransaction))
                     {
+                        expe.ajoutTransactionHistorique(transaction);
                         _statutTransactions.Add(new StatutTransaction(transaction.Id, true));
                     }
                     else
@@ -389,15 +404,29 @@ namespace ProjetP2
             //Cas ou l'utilisateur dépose de l'argent sur un guichet
             else if (transaction.Expediteur == 0)
             {
+                if (!desti.IsActif(transaction.DateTransaction))
+                {
+                   
+                    _statutTransactions.Add(new StatutTransaction(transaction.Id, false));
+                    return;
+                }
                 desti.Deposit(transaction.Montant);
                 _statutTransactions.Add(new StatutTransaction(transaction.Id, true));
+                desti.ajoutTransactionHistorique(transaction);
             }
             else
             {
+                if (!expe.IsActif(transaction.DateTransaction) || !desti.IsActif(transaction.DateTransaction))
+                {
+                    _statutTransactions.Add(new StatutTransaction(transaction.Id, false));
+                    return;
+                }
                 if (expe.Withdraw(transaction.Montant, transaction.DateTransaction))
                 {
                     
                     _statutTransactions.Add(new StatutTransaction(transaction.Id, true));
+                    expe.ajoutTransactionHistorique(transaction);
+                    desti.ajoutTransactionHistorique(transaction);
                     if (expe.Gestionnaire != desti.Gestionnaire) 
                     {
                         if (expe.Gestionnaire.Type == "Entreprise")

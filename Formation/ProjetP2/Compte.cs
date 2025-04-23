@@ -61,7 +61,7 @@ namespace ProjetP2
         public DateTime DateOuverture
         {
             get { return _dateOuverture; }
-            set { this.DateOuverture = value; } 
+            set { this._dateOuverture = value; } 
         }
 
         public DateTime DateFermeture
@@ -89,16 +89,20 @@ namespace ProjetP2
             this._id = id;
             this._solde = solde;
             this._gestionnaire = gestionnaire;
+            this.DateOuverture= dateOuverture;
             this._historique = new List<Transaction>();
         }
 
         public bool VerifyTransaction(decimal montant, DateTime dateTransaction)
         {
-            List<Transaction> listTransaction = this._historique.Where(histo => histo.Expediteur == this._id && histo.DateTransaction.AddDays(7) >= dateTransaction).ToList();
+            List<Transaction> listTransaction = this._historique.Where(histo => histo.Expediteur == this._id && histo.DateTransaction.AddDays(7) > dateTransaction).ToList();
+
 
             decimal sumMontant = listTransaction.Sum(histo => histo.Montant);
+            decimal sumMontant2 = this._historique.Where(histo => histo.Expediteur == this._id).Take(this._gestionnaire.NbTransactions).Sum(histo => histo.Montant);
             sumMontant += montant;
-            if (montant > this.Solde || sumMontant > 2000 || listTransaction.Count()+1 > this._gestionnaire.NbTransactions) 
+            sumMontant2 += montant;
+            if (montant > this.Solde || sumMontant > 2000 || sumMontant2 > 1000)  //|| listTransaction.Count()+1 > this._gestionnaire.NbTransactions
             {
                 return false;
             }
@@ -118,7 +122,7 @@ namespace ProjetP2
 
         public bool IsActif(DateTime date)
         { 
-            if(this._dateFermeture == null || date < this._dateFermeture)
+            if(this._dateFermeture == new DateTime() || date < this._dateFermeture)
             {
                 return true;
             }

@@ -29,7 +29,7 @@ namespace ProjetP2
             {
                 throw new ArgumentException("Id est invalid");
             }
-            if (type != "Particulier" || type != "Entreprise")
+            if (type != "Particulier" && type != "Entreprise")
             {
                 throw new ArgumentException("Le type du gestionnaire ne semble pas etre juste");
             }
